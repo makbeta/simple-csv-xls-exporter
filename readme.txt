@@ -1,9 +1,10 @@
 === Plugin Name ===
-Contributors: ethanhinson
+Contributors: Ethan Hinson, ethanhinson, mediebruket, Jany-M, Shambix
+Description: Export whole custom post types posts, taxonomies and custom fields into a CSV file, also from frontend.
 Tags: csv, export, excel, custom fields, custom post types
 Requires at least: 3.0.1
-Tested up to: 3.5.1
-Stable tag: .2
+Tested up to: 4.4.2
+Stable tag: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,13 +35,20 @@ First, choose the post type you wish to export from the plugin's Settings page. 
 
 In the current version of the plugin, you mush first choose your post type and click "Save Changes" before you can see a list of the associated custom fields. Be sure to click "Save Changes" again in order to save your choices. 
 
-== Screenshots ==
+= Can I export to CSV from frontend? =
+Yes, just place this URL where you want the download link/button to be: `<a class="btn" href="?export=csv">Export to CSV</a>`
+This will export as per plugin Settings.
 
-1. Screenshot of the plugin settings page. 
+= Can I change the post type, from the frontend URL? =
+Yes, use the URL var `?post_type=yourcustomposttypeslug`
+Keep in mind however, that it will still look for the taxonomies and custom fields as per plugin Settings.
 
 == Changelog ==
 
-<<<<<<< .mine
+= .4 =
+Fixed issue with SYLK format (ID in capital letters gives Excel error for CSV)
+Added url parameter post_type, to use in stand-alone url 
+
 = .3 =
 Introduce taxonomy and default WordPress field export capabailities.
 = .2 = 
@@ -50,12 +58,5 @@ Introduce taxonomy and default WordPress field export capabailities.
 = .2 =
 *Fixed bug that limited number of posts that could be exported
 
->>>>>>> .r731619
 = .1 =
 * Initial release of plugin. 
-
-
-
-
-== Upgrade Notice ==
-
