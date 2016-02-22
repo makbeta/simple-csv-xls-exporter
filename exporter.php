@@ -3,18 +3,15 @@ global $ccsve_export_check;
 
 function ccsve_export(){
     global $ccsve_export_check;
-
     $ccsve_export_check = isset($_REQUEST['export']) ? $_REQUEST['export'] : '';
     if ($ccsve_export_check == 'csv' || $ccsve_export_check == 'xls') {
         echo ccsve_generate();
         exit;
     }
-    //add_action('wp_loaded','ccsve_generate');
 }
 
 function ccsve_generate(){
-    global $ccsve_export_check, $ccsve_export_check2;
-
+    global $ccsve_export_check;
     // Get the custom post type that is being exported
     // get post type from url var
     $post_type_var = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : '';
@@ -33,7 +30,9 @@ function ccsve_generate(){
     $ccsve_generate_query = get_posts(array(
         'post_type' => $ccsve_generate_post_type,
         'post_status' => 'publish',
-        'posts_per_page' => -1
+        'posts_per_page' => -1,
+        'order' => 'ASC',
+        'orderby' => 'name'
     ));
 
     // Count the number of instances of the custom post type
