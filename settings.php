@@ -67,6 +67,7 @@ if(!class_exists('WP_CCSVE_Settings')) {
           echo '<hr>';
           echo '<p>If you want to export from a different post type than the one saved in these settings, also from frontend, use the url <strong>'.get_bloginfo('url').'/?export=csv&post_type=your_post_type_slug</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls&post_type=your_post_type_slug</strong> to get a XLS.</p>';
            echo '<hr>';
+           echo '<p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p>';
         }
 
         /**
@@ -147,8 +148,8 @@ if(!class_exists('WP_CCSVE_Settings')) {
         // Add a page to manage this plugin's settings
         add_submenu_page(
             'tools.php',
-            'CCSVE Settings',
-            'CSV Content Export',
+            'CSV/XLS Export Settings',
+            'CSV/XLS Export',
             'manage_options',
             'wp_ccsve_template',
             array(&$this, 'plugin_settings_page')
@@ -161,7 +162,25 @@ if(!class_exists('WP_CCSVE_Settings')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
         // Render the settings template
-        include(sprintf("%s/settings_page.php", dirname(__FILE__)));
+        //include(sprintf("%s/settings_page.php", dirname(__FILE__)));
+        ?>
+        <div class="wrap">
+        <h2>CSV/XLS Exporter Settings</h2>
+        <form method="post" action="options.php">
+          <?php @settings_fields('wp_ccsve-group'); ?>
+          <?php @do_settings_fields('wp_ccsve-group'); ?>
+
+          <?php do_settings_sections('wp_ccsve_template'); ?>
+
+          <?php @submit_button(); ?>
+
+          <a class="ccsve_button button button-success" href="options-general.php?page=wp_ccsve_template&export=csv">Export to CSV</a>
+
+          <a class="ccsve_button button button-success" href="options-general.php?page=wp_ccsve_template&export=xls">Export to XLS</a>
+
+        </form>
+      </div>
+    <?php
     } // END public function plugin_settings_page()
 
     } // END class wp_ccsve_template_Settings

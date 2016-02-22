@@ -55,13 +55,10 @@ Fixed issue with SYLK format (ID in capital letters gives Excel error for CSV)
 Added url parameter post_type, to use in stand-alone url 
 
 = .3 =
-Introduce taxonomy and default WordPress field export capabailities.
-= .2 = 
-*Fixed bug that limited number of posts that could be exported
+Introduce taxonomy and default WordPress field export capabailities
 
-=======
-= .2 =
-*Fixed bug that limited number of posts that could be exported
+= .2 = 
+Fixed bug that limited number of posts that could be exported
 
 = .1 =
-* Initial release of plugin. 
+Initial release of plugin

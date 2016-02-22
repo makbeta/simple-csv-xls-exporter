@@ -169,9 +169,6 @@ function ccsve_generate(){
 
     if ($ccsve_export_check == 'xls') {
 
-        // build a filename based on the post type and the data/time
-        $filename = $ccsve_generate_post_type.'-'.date('dMY_Hi').'-export.xls';
-
         function cleanData(&$str)  {
             $str = preg_replace("/\t/", "\\t", $str);
             $str = preg_replace("/\r?\n/", "\\n", $str);
@@ -182,9 +179,16 @@ function ccsve_generate(){
             if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';
             
         }
+        
+        // EXCEL .xls - Raises an unavoidable warning http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx
+        $filename = $ccsve_generate_post_type.'-'.date('dMY_Hi').'-export.xls';
+        header("Content-Disposition: Attachment; Filename=\"$filename\"");
+        header("Content-Type: Application/vnd.ms-excel");
 
-        header("Content-Disposition", "Attachment; Filename=\"$filename\"");
-        header("Content-Type", "Application/vnd.ms-excel");
+        // EXCEL .xlsx - not working
+        /*$filename = $ccsve_generate_post_type.'-'.date('dMY_Hi').'-export.xlsx';
+        header("Content-Disposition: attachment;filename=\"$filename\"");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");*/
 
         $flag = false;
 
