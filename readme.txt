@@ -1,11 +1,12 @@
 === Simple CSV/XLS Exporter ===
 Contributors: Ethan Hinson, ethanhinson, mediebruket, Jany-M
 Author URL: https://github.com/Jany-M/simple-csv-xls-exporter
-Tags: csv, export, excel, custom fields, custom post types
+Tags: csv, xls, export, excel, custom fields, custom post types
 Tested up to: 4.4.2
-Stable tag: 1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Original author URL: https://github.com/ethanhinson/custom-csv-exporter
+Forke from: https://github.com/mediebruket/custom-csv-exporter
 
 == Description ==
 
