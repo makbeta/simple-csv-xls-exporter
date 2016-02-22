@@ -1,14 +1,16 @@
 <?php
 /*
-Plugin Name: Custom CSV Export Plugin
-Description: A plugin to export WP site content into a CSV file.
-Version: .3
-Author: Ethan Hinson
-Author URI: http://www.bluetentmarketing.com
+Plugin Name: Simple CSV/XLS Export
+Description: Export whole custom post types posts, taxonomies and custom fields into a CSV or XLS file, also from frontend. See it on <a hre="https://github.com/Jany-M/simple-csv-xls-exporter" target="_blank">Github</a>.
+Version: 1
+Requires at least: 3.0.1
+Author: Shambix
+Author URI: http://www.shambix.com
 License: GPL2
 */
 /*
-Copyright 2013  Ethan Hinson  (email : ethan@bluetent.com)
+Forked https://github.com/Jany-M/simple-csv-xls-exporter
+Original author 2013  Ethan Hinson  (email : ethan@bluetent.com)
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License, version 2, as
@@ -36,8 +38,8 @@ if(!class_exists('WP_CCSVE'))
     {
           // Initialize Settings
       require_once(sprintf("%s/settings.php", dirname(__FILE__)));
-      require_once(sprintf("%s/functions/exporter.php", dirname(__FILE__)));
-      add_action('init', 'ccsve_export');
+      require_once(sprintf("%s/exporter.php", dirname(__FILE__)));
+      add_action('wp_loaded', 'ccsve_export');
       $WP_CCSVE_Settings = new WP_CCSVE_Settings();
 
         } // END public function __construct

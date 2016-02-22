@@ -21,7 +21,7 @@ if(!class_exists('WP_CCSVE_Settings')) {
 
             add_settings_section(
                 'wp_ccsve_template-section',
-                'Custom CSV Export Settings',
+                'CSV/XLS Export Settings',
                 array(&$this, 'settings_section_wp_ccsve_template'),
                 'wp_ccsve_template'
             );
@@ -36,7 +36,7 @@ if(!class_exists('WP_CCSVE_Settings')) {
 
             add_settings_field(
                 'ccsve_std_fields',
-                'Standard fields to Export',
+                'Standard WP fields to Export',
                 array(&$this, 'settings_field_select_std_fields'),
                 'wp_ccsve_template',
                 'wp_ccsve_template-section'
@@ -61,7 +61,12 @@ if(!class_exists('WP_CCSVE_Settings')) {
         } // END public static function activate
 
         public function settings_section_wp_ccsve_template()  {
-            echo 'These are the settings for the Custom CSV Export Plugin.';
+          echo '<p>From this page you can add the default post type with its connected taxonomies and custom fields, that you wish to export.<br>After that, anytime you will use the urls <strong>'.get_bloginfo('url').'/?export=csv</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls</strong>, you will get that post type data.</p>';
+          echo '<p>At the bottom of this page you can export right away what you just selected, after saving first.</p>';
+          echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
+          echo '<hr>';
+          echo '<p>If you want to export from a different post type than the one saved in these settings, also from frontend, use the url <strong>'.get_bloginfo('url').'/?export=csv&post_type=your_post_type_slug</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls&post_type=your_post_type_slug</strong> to get a XLS.</p>';
+           echo '<hr>';
         }
 
         /**
@@ -156,7 +161,7 @@ if(!class_exists('WP_CCSVE_Settings')) {
             wp_die(__('You do not have sufficient permissions to access this page.'));
         }
         // Render the settings template
-        include(sprintf("%s/templates/settings.php", dirname(__FILE__)));
+        include(sprintf("%s/settings_page.php", dirname(__FILE__)));
     } // END public function plugin_settings_page()
 
     } // END class wp_ccsve_template_Settings
