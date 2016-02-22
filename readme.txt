@@ -10,9 +10,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-This plugin allows you to export posts to CSV or XLS, through a simple link/button, from either backend or frontend.
-You can choose any post types and taxonomies (including custom ones).
-as well as a list of custom field keys you wish to export. The plugin pulls the values for those fields from all instances of your chosen custom post type and provides a link to export them as a CSV file.
+This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
+Works with custom post types, custom taxonomies and custom fields.
 
 	You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
 After that, anytime you will use the urls `https://yoursite.com/?export=csv` for a CSV file, or `https://yoursite.com/?export=xls`, you will get that post type data.
