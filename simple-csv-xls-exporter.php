@@ -1,6 +1,7 @@
 <?php
 /*
 Plugin Name: Simple CSV/XLS Export
+Plugin URI: https://github.com/Jany-M/simple-csv-xls-exporter
 Description: Export whole custom post types posts, taxonomies and custom fields into a CSV or XLS file, also from frontend. See it on <a hre="https://github.com/Jany-M/simple-csv-xls-exporter" target="_blank">Github</a>.
 Version: 1
 Requires at least: 3.0.1
