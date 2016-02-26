@@ -1,37 +1,42 @@
 === Simple CSV/XLS Exporter ===
-Contributors: Ethan Hinson, ethanhinson, mediebruket, Jany-M
-Author URL: https://github.com/Jany-M/simple-csv-xls-exporter
+
+Contributors: Dukessa, Shambix
+Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types
-Requires at least: 3.0.1
+Requires at least: 4
 Tested up to: 4.4.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+Export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend. Works with custom post types, custom taxonomies and custom fields.
+
 == Description ==
 
-This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
-Works with custom post types, custom taxonomies and custom fields.
+This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend. Works with custom post types, custom taxonomies and custom fields.
 
-	You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
+You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
+
 After that, anytime you will use the urls `https://yoursite.com/?export=csv` for a CSV file, or `https://yoursite.com/?export=xls`, you will get that post type data.
 
-	You must choose the post type and save the settings before you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.
+"You must choose the post type and save the settings before you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type."
 
-	If you want to export from a different post type than the one saved in these settings, also from frontend, use the url `https://yoursite.com/?export=csv&post_type=your_post_type_slug` for a CSV file, or `https://yoursite.com/?export=xls&post_type=your_post_type_slug` to get a XLS.
+If you want to export from a different post type than the one saved in these settings, also from frontend, use the url `https://yoursite.com/?export=csv&post_type=your_post_type_slug` for a CSV file, or `https://yoursite.com/?export=xls&post_type=your_post_type_slug` to get a XLS.
 
-	When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. Unfortunately this can't be avoided, [read more here](http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx).
+When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. Unfortunately this can't be avoided, [read more here](http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx).
 
-* [Original plugin's version](https://github.com/ethanhinson/custom-csv-exporter)
+* [Current Plugin on Github](https://github.com/Jany-M/simple-csv-xls-exporter)
+
+= Credits =
+
 * [Last forked plugin's version](https://github.com/mediebruket/custom-csv-exporter)
+* [Original plugin's version](https://github.com/ethanhinson/custom-csv-exporter)
 
 == Installation ==
-
 
 1. Upload `simple-csv-xls-export.zip` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Go to Tools -> CSV/XLS Export to access the plugins settings and export files. 
-
 
 == Frequently Asked Questions ==
 
@@ -60,9 +65,9 @@ Keep in mind however, that it will still look for the taxonomies and custom fiel
 
 == Screenshots ==
 
-1.
-2.
-3.
+1. Settings Page
+2. Settings Page
+3. Settings Page
 
 == Changelog ==
 
