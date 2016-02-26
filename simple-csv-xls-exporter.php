@@ -4,7 +4,6 @@ Plugin Name: Simple CSV/XLS Export
 Plugin URI: https://wordpress.org/plugins/simple-csv-xls-exporter/
 Author: Shambix
 Author URI: http://www.shambix.com
-Description: Export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend. Works with custom post types, custom taxonomies and custom fields.
 Version: 1.1
 */
 

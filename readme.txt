@@ -9,7 +9,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend. Works with custom post types, custom taxonomies and custom fields.
+Export posts to CSV or XLS, through a simple link/button, from backend or frontend. Supports custom post types, taxonomies and fields.
 
 == Description ==
 

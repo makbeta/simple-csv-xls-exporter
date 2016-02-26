@@ -216,3 +216,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+banner-772x250.psd
+icon-128x128.jpg
+*.psd
+icon-256x256.jpg
