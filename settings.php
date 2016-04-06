@@ -1,6 +1,6 @@
 <?php
-if(!class_exists('WP_CCSVE_Settings')) {
-    class WP_CCSVE_Settings  {
+if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
+    class SIMPLE_CSV_EXPORTER_SETTINGS  {
         /**
          * Construct the plugin object
          */
@@ -20,47 +20,47 @@ if(!class_exists('WP_CCSVE_Settings')) {
             register_setting('wp_ccsve-group', 'ccsve_custom_fields');
 
             add_settings_section(
-                'wp_ccsve_template-section',
+                'simple_csv_exporter_settings-section',
                 'CSV/XLS Export Settings',
-                array(&$this, 'settings_section_wp_ccsve_template'),
-                'wp_ccsve_template'
+                array(&$this, 'settings_section_simple_csv_exporter_settings'),
+                'simple_csv_exporter_settings'
             );
 
             add_settings_field(
                 'ccsve_post_type',
                 'Custom Post Type to Export',
                 array(&$this, 'settings_field_select_post_type'),
-                'wp_ccsve_template',
-                'wp_ccsve_template-section'
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
             );
 
             add_settings_field(
                 'ccsve_std_fields',
                 'Standard WP fields to Export',
                 array(&$this, 'settings_field_select_std_fields'),
-                'wp_ccsve_template',
-                'wp_ccsve_template-section'
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
             );
 
             add_settings_field(
                 'ccsve_custom_fields',
                 'Custom Fields to Export',
                 array(&$this, 'settings_field_select_custom_fields'),
-                'wp_ccsve_template',
-                'wp_ccsve_template-section'
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
             );
 
             add_settings_field(
                 'ccsve_tax_terms',
                 'Taxonomy Terms to Export',
                 array(&$this, 'settings_field_select_tax_terms'),
-                'wp_ccsve_template',
-                'wp_ccsve_template-section'
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
             );
 
         } // END public static function activate
 
-        public function settings_section_wp_ccsve_template()  {
+        public function settings_section_simple_csv_exporter_settings()  {
           echo '<p>From this page you can add the default post type with its connected taxonomies and custom fields, that you wish to export.<br>After that, anytime you will use the urls <strong>'.get_bloginfo('url').'/?export=csv</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls</strong>, you will get that post type data.</p>';
           echo '<p>At the bottom of this page you can export right away what you just selected, after saving first.</p>';
           echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
@@ -127,10 +127,10 @@ if(!class_exists('WP_CCSVE_Settings')) {
         } // END public function settings_field_Select_std_fields()
 
         public function settings_field_select_custom_fields()   {
-          $ccsve_post_type = get_option('ccsve_post_type');
-          $meta_keys = get_post_meta_keys($ccsve_post_type);
-          $ccsve_custom_fields =get_option('ccsve_custom_fields');
-          //var_dump($ccsve_custom_fields);
+            $ccsve_post_type = get_option('ccsve_post_type');
+            $meta_keys = generate_post_meta_keys($ccsve_post_type);
+            $ccsve_custom_fields = get_option('ccsve_custom_fields');
+
           $ccsve_meta_keys_num = count($meta_keys);
           echo '<select multiple="multiple" size="'.$ccsve_meta_keys_num.'" name="ccsve_custom_fields[selectinput][]">';
           foreach ($meta_keys as $meta_key) {
@@ -151,7 +151,7 @@ if(!class_exists('WP_CCSVE_Settings')) {
             'CSV/XLS Export Settings',
             'CSV/XLS Export',
             'manage_options',
-            'wp_ccsve_template',
+            'simple_csv_exporter_settings',
             array(&$this, 'plugin_settings_page')
         );
     } // END public function add_menu()
@@ -167,62 +167,68 @@ if(!class_exists('WP_CCSVE_Settings')) {
         <div class="wrap">
         <h2>CSV/XLS Exporter Settings</h2>
         <form method="post" action="options.php">
+
           <?php @settings_fields('wp_ccsve-group'); ?>
+
           <?php @do_settings_fields('wp_ccsve-group'); ?>
 
-          <?php do_settings_sections('wp_ccsve_template'); ?>
+          <?php do_settings_sections('simple_csv_exporter_settings'); ?>
 
           <?php @submit_button(); ?>
 
-          <a class="ccsve_button button button-success" href="options-general.php?page=wp_ccsve_template&export=csv">Export to CSV</a>
+          <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=csv">Export to CSV</a>
 
-          <a class="ccsve_button button button-success" href="options-general.php?page=wp_ccsve_template&export=xls">Export to XLS</a>
+          <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=xls">Export to XLS</a>
 
         </form>
       </div>
     <?php
     } // END public function plugin_settings_page()
 
-    } // END class wp_ccsve_template_Settings
+    } // END class simple_csv_exporter_settings_Settings
 
-} // END if(!class_exists('wp_ccsve_template_Settings'))
+} // END if(!class_exists('simple_csv_exporter_settings_Settings'))
 
 function generate_post_meta_keys($post_type){
-  global $wpdb;
-  $query = "
-  SELECT DISTINCT($wpdb->postmeta.meta_key)
-  FROM $wpdb->posts
-  LEFT JOIN $wpdb->postmeta
-  ON $wpdb->posts.ID = $wpdb->postmeta.post_id
-  WHERE $wpdb->posts.post_type = '%s'
-  AND $wpdb->postmeta.meta_key != ''
-  AND $wpdb->postmeta.meta_key NOT RegExp '(^[_0-9].+$)'
-  AND $wpdb->postmeta.meta_key NOT RegExp '(^[0-9]+$)'
-  ";
-  $meta_keys = $wpdb->get_col($wpdb->prepare($query, $post_type));
-    set_transient($post_type.'post_meta_keys', $meta_keys, 60*60*24); # 1 Day Expiration
-    return $meta_keys;
-  }
 
-  function generate_std_fields($post_type){
+    $store_meta_keys = 'simple_xls_exporter_'.$post_type.'_24h';
+    delete_transient($store_meta_keys);
+
+    if(get_transient($store_meta_keys) === false) {
+
+        global $wpdb;
+        $query = "
+            SELECT DISTINCT($wpdb->postmeta.meta_key)
+            FROM $wpdb->posts
+            LEFT JOIN $wpdb->postmeta
+            ON $wpdb->posts.ID = $wpdb->postmeta.post_id
+            WHERE $wpdb->posts.post_type = '%s'
+            AND $wpdb->postmeta.meta_key != ''
+            AND $wpdb->postmeta.meta_key NOT RegExp '(^[_0-9].+$)'
+            AND $wpdb->postmeta.meta_key NOT RegExp '(^[0-9]+$)'
+          ";
+        $meta_keys = $wpdb->get_col($wpdb->prepare($query, $post_type));
+
+        set_transient($store_meta_keys, $meta_keys, 24 * HOUR_IN_SECONDS); // 24h
+    }
+    $meta_keys = get_transient($store_meta_keys);
+
+    return $meta_keys;
+}
+
+// Get standard WP Fields
+function generate_std_fields($post_type){
     $fields = array('permalink', 'post_thumbnail');
     $q = new WP_Query(array('post_type' => $post_type, 'post_status' => 'publish', 'posts_per_page' => 1));
     $p = $q->posts[0];
-
     foreach($p as $f => $v) {
       $fields[] = $f;
     }
     return $fields;
-  }
-
-  function get_post_meta_keys($post_type){
-    $cache = get_transient($post_type.'post_meta_keys');
-    $meta_keys = $cache ? $cache : generate_post_meta_keys($post_type);
-    return $meta_keys;
-  }
-
-  function ccsve_checkboxes_fix($input) {
-   $options = get_option('ccsve_custom_fields');
-   $merged = $options;
-   $merged[] = $input;
  }
+
+function ccsve_checkboxes_fix($input, $post_type) {
+    $options = get_option('ccsve_custom_fields');
+    $merged = $options;
+    $merged[] = $input;
+}

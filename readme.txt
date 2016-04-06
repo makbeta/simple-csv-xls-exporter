@@ -71,6 +71,10 @@ Keep in mind however, that it will still look for the taxonomies and custom fiel
 
 == Changelog ==
 
+= 1.3 =
+* Fixed issue with new custom fields not showing
+* Better caching of metas (24h)
+
 = 1 =
 * Added xls support
 * Fixed bug with plugin not finding taxonomies during export because launched too early `(init->wp_loaded)`
