@@ -4,7 +4,7 @@ Contributors: Dukessa, Shambix
 Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types
 Requires at least: 4
-Tested up to: 4.4.2
+Tested up to: 4.5
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -36,7 +36,7 @@ When opening the exported xls, Excel will prompt the user with a warning, but th
 
 1. Upload `simple-csv-xls-export.zip` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to Tools -> CSV/XLS Export to access the plugins settings and export files. 
+3. Go to Tools -> CSV/XLS Export to access the plugins settings and export files.
 
 == Frequently Asked Questions ==
 
@@ -44,12 +44,12 @@ When opening the exported xls, Excel will prompt the user with a warning, but th
 
 Head over to the plugin's settings page, choose the post type. Then click "Save Changes" at the end of the page.
 At this point, a list of the custom taxonomies and fields associated with that post type will appear.
-Choose all of the fields you wish to export (use CTRL+click to select multiple ones) and click "Save Changes" again. Then click on the "Export" buttons to get your CSV or XLS file. 
+Choose all of the fields you wish to export (use CTRL+click to select multiple ones) and click "Save Changes" again. Then click on the "Export" buttons to get your CSV or XLS file.
 
 = I don't see any custom fields on the Settings page. How come? =
 
 You mush first choose your post type and click "Save Changes" before you can see a list of the associated custom fields.
-Be sure to click "Save Changes" again in order to save your choices. 
+Be sure to click "Save Changes" again in order to save your choices.
 
 = Can I export to CSV from frontend? =
 Yes, just place this URL where you want the download link/button to be: `<a class="btn" href="?export=csv">Export to CSV</a>`
@@ -81,12 +81,12 @@ Keep in mind however, that it will still look for the taxonomies and custom fiel
 
 = .4 =
 * Fixed issue with SYLK format (ID in capital letters gives Excel error for CSV)
-* Added url parameter `&post_type`, to use in stand-alone url 
+* Added url parameter `&post_type`, to use in stand-alone url
 
 = .3 =
 * Introduce taxonomy and default WordPress field export capabailities
 
-= .2 = 
+= .2 =
 * Fixed bug that limited number of posts that could be exported
 
 = .1 =
