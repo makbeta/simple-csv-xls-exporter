@@ -63,6 +63,13 @@ This will export as per plugin Settings.
 Yes, use the URL var `?post_type=yourcustomposttypeslug`
 Keep in mind however, that it will still look for the taxonomies and custom fields as per plugin Settings.
 
+= Can I only export parents or children? =
+Yes, use the URL var `?only=x`, where x is either `children` or `parents`.
+Default is both.
+
+= Does it support cyrillic characters? (eg. Russian) =
+Yes, but only for the CSV format (for now).
+
 == Screenshots ==
 
 1. Settings Page
@@ -70,6 +77,12 @@ Keep in mind however, that it will still look for the taxonomies and custom fiel
 3. Settings Page
 
 == Changelog ==
+
+= 1.3.2 =
+* Added url var to only export parents or children
+* Added cyrillic characters compatibility for CSV
+* Restructured part of the plugin
+* Saved options get removed when uninstalling plugin
 
 = 1.3 =
 * Fixed issue with new custom fields not showing
