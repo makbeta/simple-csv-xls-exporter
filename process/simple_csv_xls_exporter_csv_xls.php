@@ -18,6 +18,7 @@ function simple_csv_xls_exporter_csv_xls(){
     $ccsve_generate_custom_fields = get_option('ccsve_custom_fields');
     $ccsve_generate_std_fields = get_option('ccsve_std_fields');
     $ccsve_generate_tax_terms = get_option('ccsve_tax_terms');
+    $ccsve_generate_woocommerce_fields = get_option('ccsve_woocommerce_fields');
 
     // Are we getting only parents or children?
     if($export_only == 'parents') {
@@ -82,16 +83,18 @@ function simple_csv_xls_exporter_csv_xls(){
         $post->post_thumbnail = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
 
         // get the standard wordpress fields for each instance of the custom post type
-        foreach($post as $key => $value) {
-            if(in_array($key, $ccsve_generate_std_fields['selectinput'])) {
-                // Prevent SYLK format issue
-                if($key == 'ID') {
-                    // add an apostrophe before ID
-                    //$ccsve_generate_value_arr["'".$key][$i] = $post->$key;
-                    // or make it lower-case
-                    $ccsve_generate_value_arr[strtolower($key)][$i] = $post->$key;
-                } else {
-                    $ccsve_generate_value_arr[$key][$i] = $post->$key;
+        if(!empty($ccsve_generate_std_fields['selectinput'])) {
+            foreach($post as $key => $value) {
+                if(in_array($key, $ccsve_generate_std_fields['selectinput'])) {
+                    // Prevent SYLK format issue
+                    if($key == 'ID') {
+                        // add an apostrophe before ID
+                        //$ccsve_generate_value_arr["'".$key][$i] = $post->$key;
+                        // or make it lower-case
+                        $ccsve_generate_value_arr[strtolower($key)][$i] = $post->$key;
+                    } else {
+                        $ccsve_generate_value_arr[$key][$i] = $post->$key;
+                    }
                 }
             }
         }
@@ -126,14 +129,57 @@ function simple_csv_xls_exporter_csv_xls(){
         }
 
         // get the custom field values for each instance of the custom post type
-        $ccsve_generate_post_values = get_post_custom($post->ID);
+        if(!empty($ccsve_generate_custom_fields['selectinput'])) {
+            $ccsve_generate_post_values = get_post_custom($post->ID);
+            foreach ($ccsve_generate_custom_fields['selectinput'] as $key) {
+                // check if each custom field value matches a custom field that is being exported
+                if (array_key_exists($key, $ccsve_generate_post_values)) {
+                    // if the the custom fields match, save them to the array of custom field values
+                    $ccsve_generate_value_arr[$key][$i] = $ccsve_generate_post_values[$key]['0'];
+               }
+            }
+        }
+
+        // get the WooCommerce field values for each instance of the custom post type
+        /*$ccsve_generate_post_values = get_post_custom($post->ID);
         foreach ($ccsve_generate_custom_fields['selectinput'] as $key) {
             // check if each custom field value matches a custom field that is being exported
             if (array_key_exists($key, $ccsve_generate_post_values)) {
                 // if the the custom fields match, save them to the array of custom field values
                 $ccsve_generate_value_arr[$key][$i] = $ccsve_generate_post_values[$key]['0'];
            }
-        }
+       }*/
+        /*if(!empty($ccsve_generate_woocommerce_fields['selectinput']) && class_exists('WC_Product')) {
+            global  $woocommerce,
+                    $product;
+            //$product = wc_get_product( $post->ID );
+            $product_id = $product->id;
+
+            $get_all_meta = get_post_meta($product_id);
+
+            // 'sku',
+            $price = get_post_meta($product_id, '_price', true);
+
+            'regular_price',
+            'sale_price',
+            'manage_stock',
+            'stock_status',
+            'backorders',
+            'stock',
+            'featured',
+            'featured_image',
+            'product_gallery'
+
+            // Price
+            //$price = get_post_meta($product_id, '_price', true);
+
+            echo '<pre>';
+            //var_dump($product);
+            //var_dump($price);
+            var_dump($get_all_meta);
+            echo '</pre>';
+            exit;
+        }*/
 
         $i++;
 
@@ -217,6 +263,19 @@ function simple_csv_xls_exporter_csv_xls(){
             //$str = mb_convert_encoding($str, 'ASCII', 'UTF-8');
         }
 
+        // Check if there are Cyrillic chars
+        /*$i = 0;
+        foreach ( $ccsve_generate_value_arr_new as $check_array ) {
+            array_walk($check_array, 'cleanData');
+            foreach ($check_array as $key => $value) {
+                $is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity($value, array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
+                if($is_russian == 1) {
+                    $i++;
+                }
+            }
+        }
+        $is_russian = $i;*/
+
         // EXCEL .xls - Raises an unavoidable warning http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx
         $filename = SIMPLE_CSV_XLS_EXPORTER_EXTRA_FILE_NAME.$ccsve_generate_post_type.'-'.date('dMY_Hi').'-export.xls';
 
@@ -229,20 +288,51 @@ function simple_csv_xls_exporter_csv_xls(){
         header("Expires: 0");
         header("Pragma: public");
 
-        // EXCEL .xlsx - not working
-        //header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        // This works but breaks the xls columns
+        /*if($is_russian > 0) {
+            echo "\xEF\xBB\xBF";
+        }*/
 
-        echo "\xEF\xBB\xBF"; // UTF-8 BOM
-
-        $flag = false;
+        $flag = false; // Remove field names from the top?
         foreach ( $ccsve_generate_value_arr_new as $data ) {
             if(!$flag) {
-              // display field/column names as first row
-              echo implode("\t", array_keys($ccsve_generate_value_arr)) . "\r\n";
-              $flag = true;
+                echo implode("\t", array_keys($ccsve_generate_value_arr)) . "\r\n";
+                $flag = true;
             }
             array_walk($data, 'cleanData');
-            echo implode("\t", array_values($data)) . "\r\n";
+
+            // DEBUG
+            // Get encoding format
+            //$data_string = implode("\t", array_values($data));
+            // echo mb_detect_encoding($data_string);
+            // Support for Euro sign
+            // http://php.net/manual/en/function.utf8-decode.php
+            //iconv("UTF-8", "CP1252", $data)
+            //$data_string = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $data_string);
+            //$is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity($data_string, array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
+            //$is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity(implode("\t", array_values($data)), array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
+            //var_dump($is_russian);
+
+            // Check for EUR sign
+            /*foreach ($data as $key => $value) {
+                //iconv("UTF-8", "CP1252", $value);
+                //echo 'Original : ', $value, PHP_EOL;
+                //echo 'TRANSLIT : ', iconv("UTF-8", "ISO-8859-1//TRANSLIT", $value), PHP_EOL;
+                //echo 'IGNORE   : ', iconv("UTF-8", "ISO-8859-1//IGNORE", $value), PHP_EOL;
+                //echo 'Plain    : ', iconv("UTF-8", "ISO-8859-1", $value), PHP_EOL;
+
+                $value = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $value);
+            }*/
+
+            //if($is_russian > 0) {
+                //$data_string = implode("\t", array_values($data));
+            //} else {
+                // Add Support for special latin characters (but not Cyrillic)
+                $data_string = implode("\t", array_map('utf8_decode',array_values($data)));
+            //}
+
+            // Final output
+            echo $data_string . "\r\n";
         }
         exit;
 
