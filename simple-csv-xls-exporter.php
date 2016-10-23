@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/simple-csv-xls-exporter/
 Description: Export posts to CSV or XLS, through a simple link/button, from backend or frontend. Supports custom post types, WooCommerce products, custom taxonomies and fields.
 Author: Shambix
 Author URI: http://www.shambix.com
-Version: 1.3.5
+Version: 1.3.8
 */
 
 /*
@@ -13,7 +13,7 @@ Forked at https://github.com/Jany-M/simple-csv-xls-exporter
 Original author 2013  Ethan Hinson  (email : ethan@bluetent.com)
 */
 
-//define('SIMPLE_CSV_EXPORTER_VERSION', '1.3.5');
+//define('SIMPLE_CSV_EXPORTER_VERSION', '1.3.8');
 
 /*--------------------------------------
 |                                      |
@@ -47,6 +47,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER')) {
 
         public static function deactivate() {
             unregister_setting('wp_ccsve-group', 'ccsve_post_type');
+            unregister_setting('wp_ccsve-group', 'ccsve_post_status');
             unregister_setting('wp_ccsve-group', 'ccsve_std_fields');
             unregister_setting('wp_ccsve-group', 'ccsve_tax_terms');
             unregister_setting('wp_ccsve-group', 'ccsve_custom_fields');

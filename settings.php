@@ -1,20 +1,17 @@
 <?php
 if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
     class SIMPLE_CSV_EXPORTER_SETTINGS  {
-        /**
-         * Construct the plugin object
-         */
+
         public function __construct()        {
             // register actions
             add_action('admin_init', array(&$this, 'admin_init'));
             add_action('admin_menu', array(&$this, 'add_menu'));
         } // END public function __construct
 
-        /**
-         * hook into WP's admin_init action hook
-         */
         public function admin_init()    {
+            register_setting('wp_ccsve-group', 'ccsve_admin_only');
             register_setting('wp_ccsve-group', 'ccsve_post_type');
+            register_setting('wp_ccsve-group', 'ccsve_post_status');
             register_setting('wp_ccsve-group', 'ccsve_std_fields');
             register_setting('wp_ccsve-group', 'ccsve_tax_terms');
             register_setting('wp_ccsve-group', 'ccsve_custom_fields');
@@ -22,15 +19,32 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
 
             add_settings_section(
                 'simple_csv_exporter_settings-section',
-                'CSV/XLS Export Settings',
+                //'CSV/XLS Export Settings',
+                '',
                 array(&$this, 'settings_section_simple_csv_exporter_settings'),
                 'simple_csv_exporter_settings'
+            );
+
+            add_settings_field(
+                'ccsve_admin_only',
+                'Only allow export from backend (ALL logged in users)',
+                array(&$this, 'settings_field_select_admin'),
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
             );
 
             add_settings_field(
                 'ccsve_post_type',
                 'Custom Post Type to Export',
                 array(&$this, 'settings_field_select_post_type'),
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
+            );
+
+            add_settings_field(
+                'ccsve_post_status',
+                'Post Status to Export',
+                array(&$this, 'settings_field_select_post_status'),
                 'simple_csv_exporter_settings',
                 'simple_csv_exporter_settings-section'
             );
@@ -70,20 +84,26 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
 
         } // END public static function activate
 
-        public function settings_section_simple_csv_exporter_settings()  {
-            echo '<p>From this page you can add the default post type with its connected taxonomies and custom fields, that you wish to export.<br>After that, anytime you will use the urls <strong>'.get_bloginfo('url').'/?export=csv</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls</strong>, you will get that post type data.</p>';
-            echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
-            echo '<p>At the bottom of this page you can export right away what you just selected, after saving first.</p>';
-            echo '<hr>';
-            echo '<p>If you want to export from a different post type than the one saved in these settings, also from frontend, use the url <strong>'.get_bloginfo('url').'/?export=csv&post_type=your_post_type_slug</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls&post_type=your_post_type_slug</strong> to get a XLS.</p>';
-            echo '<hr>';
-            echo '<p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p>';
+        public function settings_field_select_admin() {
+            // Get the value of this setting
+            $admin_only = get_option('ccsve_admin_only');
+            if(empty($admin_only)) $admin_only = 'No';
+            $admin_options = array(
+                'No',
+                'Yes'
+            );
+            // echo a proper input type="text"
+            foreach ($admin_options as $admin_option) {
+                $checked = ($admin_only == $admin_option) ? ' checked="checked" ' : '';
+                // radio buttons, 1 post type per time
+                echo '<input type="radio" id="admin_only" name="ccsve_admin_only" value="'.$admin_option.'" '.$checked.'" />';
+                echo '<label for=admin_only'.$admin_option.'> '.$admin_option.'</label>';
+                echo ' <br />';
+            }
         }
 
-        /**
-         * This function provides text inputs for settings fields
-         */
         public function settings_field_select_post_type() {
+            //global $items;
             $args = array(
                 'public'   => true,
             );
@@ -95,7 +115,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             foreach ($items as $item) {
                 $checked = ($options == $item) ? ' checked="checked" ' : '';
                 // radio buttons, 1 post type per time
-                echo '<input type="radio" id="post_type"'.$item.' name="ccsve_post_type" value="'.$item.'" '.$checked.'" />';
+                echo '<input type="radio" id="post_type" name="ccsve_post_type" value="'.$item.'" '.$checked.'" />';
                 // checkboxes dont work
                 //echo '<input type="checkbox" name="ccsve_post_type['.$item.']" value="'.$item.'" '.$checked.' />';
                 echo '<label for=post_type'.$item.'> '.$item.'</label>';
@@ -103,11 +123,38 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             }
         }
 
+        public function settings_field_select_post_status() {
+            //global $items;
+            //$post_types = get_option('ccsve_post_type');
+            $args = array();
+            $ccsve_post_status = get_option('ccsve_post_status');
+            if($ccsve_post_status == '' || is_null($ccsve_post_status)) $ccsve_post_status = 'any';
+            $stati = get_post_stati( $args, 'names', 'or' );
+
+            //echo '<p>ANY = retrieves any status except those from post statuses with "exclude_from_search" set to true (i.e. trash and auto-draft)</p>';
+
+            $ccsve_post_status_num = count($stati)+1;
+            echo '<select multiple="multiple" size="'.$ccsve_post_status_num.'" name="ccsve_post_status[selectinput][]">';
+            // Any
+            echo '\n\t<option selected="selected" value="any">any</option>';
+            foreach ($stati as $status) {
+                if (in_array($status, $ccsve_post_status['selectinput'])) {
+                    echo '\n\t<option selected="selected" value="'. $status . '">'.$status.'</option>';
+                } else {
+                    echo '\n\t\<option value="'.$status .'">'.$status.'</option>';
+                }
+            }
+        }
+
         public function settings_field_select_std_fields() {
             $ccsve_post_type = get_option('ccsve_post_type');
-            $fields = generate_std_fields($ccsve_post_type);
+            $ccsve_post_status = get_option('ccsve_post_status')[0];
+            if($ccsve_post_status == '' || is_null($ccsve_post_status)) $ccsve_post_status = 'any';
+
+            $fields = generate_std_fields($ccsve_post_type, $ccsve_post_status);
             $ccsve_std_fields = get_option('ccsve_std_fields');
             $ccsve_std_fields_num = count($fields);
+
             echo '<select multiple="multiple" size="'.$ccsve_std_fields_num.'" name="ccsve_std_fields[selectinput][]">';
             foreach ($fields as $field) {
                 if (in_array($field, $ccsve_std_fields['selectinput'])) {
@@ -186,50 +233,63 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             } // if class exists
         }*/
 
+        // ADD MENU
+        public function add_menu() {
+            // Add a page to manage this plugin's settings
+            add_submenu_page(
+                'tools.php',
+                'CSV/XLS Export Settings',
+                'CSV/XLS Export',
+                'manage_options',
+                'simple_csv_exporter_settings',
+                array(&$this, 'plugin_settings_page')
+            );
+        } // END public function add_menu()
 
-    // ADD MENU
-    public function add_menu() {
-        // Add a page to manage this plugin's settings
-        add_submenu_page(
-            'tools.php',
-            'CSV/XLS Export Settings',
-            'CSV/XLS Export',
-            'manage_options',
-            'simple_csv_exporter_settings',
-            array(&$this, 'plugin_settings_page')
-        );
-    } // END public function add_menu()
-
-    // MENU CALLBACK
-    public function plugin_settings_page() {
-        if(!current_user_can('manage_options')) {
-            wp_die(__('You do not have sufficient permissions to access this page.'));
+        // Settings Page contents
+        public function settings_section_simple_csv_exporter_settings()  {
+            echo '<p>From this page you can add the default post type with its connected taxonomies and custom fields, that you wish to export.<br>After that, anytime you will use the urls <strong>'.get_bloginfo('url').'/?export=csv</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls</strong>, you will get that post type data.</p>';
+            echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
+            echo '<p>At the bottom of this page you can export right away what you just selected, after saving first.</p>';
+            echo '<hr>';
+            echo '<p>If you want to export from a different post type than the one saved in these settings, also from frontend, use the url <strong>'.get_bloginfo('url').'/?export=csv&post_type=your_post_type_slug</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls&post_type=your_post_type_slug</strong> to get a XLS.</p>';
+            echo '<hr>';
+            echo '<p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p>';
         }
-        // Render the settings template
-        //include(sprintf("%s/settings_page.php", dirname(__FILE__)));
-        ?>
-        <div class="wrap">
-        <h2>CSV/XLS Exporter Settings</h2>
-        <form method="post" action="options.php">
 
-          <?php @settings_fields('wp_ccsve-group'); ?>
+        // MENU CALLBACK
+        public function plugin_settings_page() {
+            if(!current_user_can('manage_options')) {
+                wp_die(__('You do not have sufficient permissions to access this page.'));
+            }
+            // Render the settings template
+            //include(sprintf("%s/settings_page.php", dirname(__FILE__)));
+            ?>
+            <div class="wrap">
 
-          <?php @do_settings_fields('wp_ccsve-group'); ?>
+                <h2>CSV/XLS Exporter Settings</h2>
 
-          <?php do_settings_sections('simple_csv_exporter_settings'); ?>
+                <form method="post" action="options.php">
 
-          <?php @submit_button(); ?>
+                  <?php @settings_fields('wp_ccsve-group'); ?>
+                  <?php @do_settings_fields('wp_ccsve-group'); ?>
+                  <?php do_settings_sections('simple_csv_exporter_settings'); ?>
+                  <?php @submit_button(); ?>
 
-          <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=csv">Export to CSV</a>
+                  <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=csv">Export to CSV</a>
+                  <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=xls">Export to XLS</a>
 
-          <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=xls">Export to XLS</a>
+                 <!-- <p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p> -->
 
-         <p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p>
+                </form>
 
-        </form>
-      </div>
-    <?php
-    } // END public function plugin_settings_page()
+                <div class="simple_csv_exporter" style="border:1px solid #ddd; padding:10px;margin:20px auto;">
+                    <p>Plugin developed by <a href="http://www.shambix.com" target="blank">Shambix</a> | Need to customize it? <a href="mailto:info@shambix.com">Email me</a>!</p>
+                </div>
+
+            </div>
+            <?php
+        } // END public function plugin_settings_page()
 
     } // END class simple_csv_exporter_settings_Settings
 
@@ -269,9 +329,11 @@ function generate_post_meta_keys($post_type){
 }
 
 // Get standard WP Fields
-function generate_std_fields($post_type){
+function generate_std_fields($post_type, $post_status){
+    if($post_status == '' || is_null($post_status)) $post_status = 'any';
+    //var_dump($post_status);
     $fields = array('permalink', 'post_thumbnail');
-    $q = new WP_Query(array('post_type' => $post_type, 'post_status' => 'publish', 'posts_per_page' => 1));
+    $q = new WP_Query(array('post_type' => $post_type, 'post_status' => $post_status, 'posts_per_page' => 1));
     $p = $q->posts[0];
     foreach($p as $f => $v) {
       $fields[] = $f;
