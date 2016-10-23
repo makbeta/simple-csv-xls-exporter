@@ -135,8 +135,14 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
 
             $ccsve_post_status_num = count($stati)+1;
             echo '<select multiple="multiple" size="'.$ccsve_post_status_num.'" name="ccsve_post_status[selectinput][]">';
+
             // Any
-            echo '\n\t<option selected="selected" value="any">any</option>';
+            if($ccsve_post_status == '' || is_null($ccsve_post_status)) {
+                echo '\n\t<option selected="selected" value="any">any</option>';
+            } else {
+                echo '\n\t\<option value="any">any</option>';
+            }
+
             foreach ($stati as $status) {
                 if (in_array($status, $ccsve_post_status['selectinput'])) {
                     echo '\n\t<option selected="selected" value="'. $status . '">'.$status.'</option>';
@@ -249,7 +255,8 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
         // Settings Page contents
         public function settings_section_simple_csv_exporter_settings()  {
             echo '<p>From this page you can add the default post type with its connected taxonomies and custom fields, that you wish to export.<br>After that, anytime you will use the urls <strong>'.get_bloginfo('url').'/?export=csv</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls</strong>, you will get that post type data.</p>';
-            echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type. Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
+            //echo '<br>';
+            echo '<p>You must choose the post type and save the settings <strong>before</strong> you can see the taxonomies or custom fields for a custom post type.<br>Once the page reloads, you will see the connected taxonomies and custom fields for the post type.</p>';
             echo '<p>At the bottom of this page you can export right away what you just selected, after saving first.</p>';
             echo '<hr>';
             echo '<p>If you want to export from a different post type than the one saved in these settings, also from frontend, use the url <strong>'.get_bloginfo('url').'/?export=csv&post_type=your_post_type_slug</strong> for a CSV file, or <strong>'.get_bloginfo('url').'/?export=xls&post_type=your_post_type_slug</strong> to get a XLS.</p>';
@@ -262,10 +269,48 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             if(!current_user_can('manage_options')) {
                 wp_die(__('You do not have sufficient permissions to access this page.'));
             }
+
             // Render the settings template
-            //include(sprintf("%s/settings_page.php", dirname(__FILE__)));
             ?>
-            <div class="wrap">
+
+            <style>
+                .simple_csv_exporter_wrap {}
+                .simple_csv_exporter_wrap form {
+                    width: 70%;
+                    float:left;
+                }
+                .simple_csv_exporter_wrap .sidebar {
+                    width:20%;
+                    float:left;
+                    margin-left:5%;
+                }
+                .simple_csv_exporter_wrap .sidebar .block {
+                    padding:10px;
+                    background-color: #ddd;
+                    border: 1px solid #999;
+                    margin-bottom: 20px;
+                }
+                .simple_csv_exporter_wrap .sidebar .donate p a {
+                    display: block;
+                    text-align: center;
+                    margin: 5px auto;
+                }
+                .simple_csv_exporter_wrap .footer {
+                    /*background-color: #ddd;
+                    border: 1px solid #999;
+                    margin: 20px auto;
+                    padding: 10px;*/
+                    clear:both;
+                    margin:20px auto;
+                    text-align: center;
+                }
+                .simple_csv_exporter_wrap .footer a {
+                    text-align:center;
+                    margin: 0 auto;
+                }
+            </style>
+
+            <div class="wrap simple_csv_exporter_wrap">
 
                 <h2>CSV/XLS Exporter Settings</h2>
 
@@ -279,12 +324,38 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                   <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=csv">Export to CSV</a>
                   <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=xls">Export to XLS</a>
 
-                 <!-- <p><i>When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. <strong>Unfortunately this can\'t be avoided</strong>, <a href="http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx" target="_blank">read more here</a>.</i></p> -->
-
                 </form>
 
-                <div class="simple_csv_exporter" style="border:1px solid #ddd; padding:10px;margin:20px auto;">
-                    <p>Plugin developed by <a href="http://www.shambix.com" target="blank">Shambix</a> | Need to customize it? <a href="mailto:info@shambix.com">Email me</a>!</p>
+                <div class="sidebar">
+                    <div class="block">
+                        <p><h3>Plugin developed by <a href="http://www.shambix.com" target="blank">Shambix</a></h3></p>
+                        <p><strong>Need to customize it or want to speed up a certain feature developement?<br><a href="mailto:info@shambix.com">Email me</a>!</strong></p>
+                    </div>
+                    <div class="block">
+                        <p><strong>Found a bug?</strong><br>Let me know in the <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/" target="_blank">forum</a></p>
+                        <p><strong>Like the plugin?</strong><br>Give it a good <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/reviews#new-topic-0" target="=_blank">review</a>, so other people can find it &amp; enjoy it too!</p>
+                    </div>
+                    <div class="block donate">
+                        <p>This plugin has been developed in my (almost none) spare time and <strong>it's free</strong>.
+                            <br><br>Even a tiny donation will help me making it better, by updating it more often without switching to a commercial license.</p>
+                        <p>
+                            <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                                <input type="hidden" name="cmd" value="_s-xclick">
+                                <input type="hidden" name="hosted_button_id" value="3UR3E5PL3TW3E">
+                                <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
+                                <img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
+                            </form> -->
+                            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3UR3E5PL3TW3E" target="_blank"><img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif"></a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- https://httpsimage.com/img/shambix_banner_750x90.jpg
+                https://httpsimage.com/img/shambix_banner_918x104.jpg -->
+
+                <div class="footer">
+                    <!-- <p>Plugin developed by <a href="http://www.shambix.com" target="blank">Shambix</a> | Need to customize it? <a href="mailto:info@shambix.com">Email me</a>! | Like the plugin? Give it a good <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/reviews#new-topic-0" target="=_blank">review</a>, so other people can enjoy it too!</p> -->
+                    <a href="http://www.shambix.com" target="blank"><img src="https://httpsimage.com/img/shambix_banner_918x104.jpg"></a>
                 </div>
 
             </div>

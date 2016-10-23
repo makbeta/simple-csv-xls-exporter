@@ -18,10 +18,11 @@ function simple_csv_xls_exporter_csv_xls(){
     // get post type from url var
     $post_status_var = isset($_REQUEST['post_status']) ? $_REQUEST['post_status'] : '';
     if(empty($post_status_var)) {
-        $ccsve_generate_post_status = get_option('ccsve_post_status');
+        $ccsve_generate_post_status = get_option('ccsve_post_status')["selectinput"][0];
     } else {
         $ccsve_generate_post_status = $post_status_var;
     }
+    //var_dump($ccsve_generate_post_status); echo $ccsve_generate_post_status; exit;
 
     // Get the custom fields (for the custom post type) that are being exported
     $ccsve_generate_custom_fields = get_option('ccsve_custom_fields');
@@ -36,10 +37,10 @@ function simple_csv_xls_exporter_csv_xls(){
         $ccsve_generate_query = get_posts(array(
             'post_type' => $ccsve_generate_post_type,
             'post_parent' => 0,
-            'post_status' => $ccsve_post_status,
+            'post_status' => $ccsve_generate_post_status,
             'posts_per_page' => -1,
             'order' => 'ASC',
-            'orderby' => 'name'
+            //'orderby' => 'name'
         ));
 
     } elseif($export_only == 'children') {
@@ -48,22 +49,24 @@ function simple_csv_xls_exporter_csv_xls(){
         $csv_parent_export = get_posts(array(
             'post_type' => $ccsve_generate_post_type,
             'post_parent' => 0,
-            'post_status' => $ccsve_post_status,
+            'post_status' => $ccsve_generate_post_status,
             'posts_per_page' => -1
         ));
 
         $parents_ids_array = array();
         foreach ($csv_parent_export as $post): setup_postdata($post);
-            $parents_ids_array[] = $post->ID;
+            //if($post->post_parent) != 0) {
+                $parents_ids_array[] = $post->ID;
+            //}
         endforeach;
 
         $ccsve_generate_query = get_posts(array(
             'post_type' => $ccsve_generate_post_type,
-            'post_status' => $ccsve_post_status,
+            'post_status' => $ccsve_generate_post_status,
             'exclude' => $parents_ids_array,
             'posts_per_page' => -1,
             'order' => 'ASC',
-            'orderby' => 'name'
+            //'orderby' => 'name'
         ));
 
     } else {
@@ -71,10 +74,10 @@ function simple_csv_xls_exporter_csv_xls(){
         // Query the DB for all instances of the custom post type
         $ccsve_generate_query = get_posts(array(
             'post_type' => $ccsve_generate_post_type,
-            'post_status' => $ccsve_post_status,
+            'post_status' => $ccsve_generate_post_status,
             'posts_per_page' => -1,
             'order' => 'ASC',
-            'orderby' => 'name'
+            //'orderby' => 'name'
         ));
 
     }
