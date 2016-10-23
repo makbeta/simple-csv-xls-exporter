@@ -4,19 +4,18 @@ Contributors: Shambix, Dukessa
 Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types
 Requires at least: 4
-Tested up to: 4.6
+Tested up to: 4.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Export posts to CSV or XLS, through a simple link/button, from backend or frontend. Supports custom post types, WooCommerce products, custom taxonomies, custom post statuses and fields.
+Export posts to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses & fields.
 
 == Description ==
 
 This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
 
-> Supports:
-
+> ***Supports**
 * custom post types
 * custom post statuses
 * custom taxonomies
@@ -32,6 +31,12 @@ After that, anytime you will use the urls `https://yoursite.com/?export=csv` for
 If you want to export from a different post type than the one saved in these settings, also from frontend, use the url `https://yoursite.com/?export=csv&post_type=your_post_type_slug` for a CSV file, or `https://yoursite.com/?export=xls&post_type=your_post_type_slug` to get a XLS.
 
 When opening the exported xls, Excel will prompt the user with a warning, but the file is perfectly fine and can then be opened. Unfortunately this can't be avoided, [read more here](http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx).
+
+= Questions? =
+
+Check the FAQ before opening new threads in the forum!
+
+> Contact me if you want a **custom version of the plugin**, for a fee (contact form at [shambix.com](http://www.shambix.com)).
 
 * [Current Plugin on Github](https://github.com/Jany-M/simple-csv-xls-exporter)
 
@@ -77,6 +82,10 @@ Default is both.
 
 = Does it support cyrillic characters? (eg. Russian) =
 Yes, but only for the CSV format (for now).
+
+= Can I export only posts with a certain post status? =
+Yes, as of v. 1.3.8.
+You can set it up from the Settings page as default, or add to your url `?post_status=nameofstatus`
 
 == Screenshots ==
 
