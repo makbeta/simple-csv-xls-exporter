@@ -128,7 +128,37 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             //$post_types = get_option('ccsve_post_type');
             $args = array();
             $ccsve_post_status = get_option('ccsve_post_status');
-            if($ccsve_post_status == '' || is_null($ccsve_post_status)) $ccsve_post_status = 'any';
+
+            // If Status selection is empty
+            if($ccsve_post_status == '' || is_null($ccsve_post_status)) {
+                $ccsve_post_status =  array();
+                $ccsve_post_status = array('selectinput' => array(0 => 'any'));
+            }
+
+            /*echo '<pre>';
+            var_dump($ccsve_post_status);
+            echo '</pre>'; exit;*/
+
+            // 1 status
+            /*array(1) {
+              ["selectinput"]=>
+              array(1) {
+                [0]=>
+                string(7) "publish"
+              }
+            }*/
+
+            // 2 stati
+            /*array(1) {
+              ["selectinput"]=>
+              array(2) {
+                [0]=>
+                string(7) "publish"
+                [1]=>
+                string(7) "private"
+              }
+            }*/
+
             $stati = get_post_stati( $args, 'names', 'or' );
 
             //echo '<p>ANY = retrieves any status except those from post statuses with "exclude_from_search" set to true (i.e. trash and auto-draft)</p>';
@@ -154,8 +184,13 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
 
         public function settings_field_select_std_fields() {
             $ccsve_post_type = get_option('ccsve_post_type');
-            $ccsve_post_status = get_option('ccsve_post_status')[0];
-            if($ccsve_post_status == '' || is_null($ccsve_post_status)) $ccsve_post_status = 'any';
+            $ccsve_post_status = get_option('ccsve_post_status');
+
+            // If Status selection is empty
+            if($ccsve_post_status == '' || is_null($ccsve_post_status)) {
+                $ccsve_post_status =  array();
+                $ccsve_post_status = array('selectinput' => array(0 => 'any'));
+            }
 
             $fields = generate_std_fields($ccsve_post_type, $ccsve_post_status);
             $ccsve_std_fields = get_option('ccsve_std_fields');

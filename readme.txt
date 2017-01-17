@@ -1,26 +1,30 @@
 === Simple CSV/XLS Exporter ===
 
-Contributors: Shambix, Dukessa
+Author: Shambix
+Contributors: Dukessa
 Author URL: http://www.shambix.com
-Tags: csv, xls, export, excel, custom fields, custom post types
+Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
-Tested up to: 4.6.1
+Tested up to: 4.7.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Export posts to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses & fields.
+Export any content to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses & fields.
 
 == Description ==
 
 This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
 
-> ***Supports**
+> **Supports**
 * custom post types
 * custom post statuses
 * custom taxonomies
 * custom fields
 * WooCommerce products, categories and fields
+
+> **Next Release**
+* export only current user posts
 
 You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
 
@@ -94,6 +98,9 @@ You can set it up from the Settings page as default, or add to your url `?post_s
 3. Settings Page
 
 == Changelog ==
+
+= 1.3.9 =
+* Fixed bugs: `Illegal string offset ‘selectinput’ in simple-csv-xls-exporter\settings.php on line 147`, `in_array() expects parameter 2 to be array, string given in simple-csv-xls-exporter\settings.php on line 147`, `syntax error, unexpected ‘[‘ in simple-csv-xls-exporter/settings.php on line 157`
 
 = 1.3.8 =
 * Added support for Post Status
