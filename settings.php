@@ -367,11 +367,12 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                         <p><strong>Need to customize it or want to speed up a certain feature developement?<br><a href="mailto:info@shambix.com">Email me</a>!</strong></p>
                     </div>
                     <div class="block">
-                        <p><strong>Found a bug?</strong><br>Let me know in the <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/" target="_blank">forum</a></p>
+                        <p><strong>Documentation</strong><br>Check the <a href="https://wordpress.org/plugins/simple-csv-xls-exporter/faq/" target="_blank">FAQ</a></p>
+                        <p><strong>Bugs? Questions?</strong><br>Let me know in the <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/" target="_blank">forum</a></p>
                         <p><strong>Like the plugin?</strong><br>Give it a good <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/reviews#new-topic-0" target="=_blank">review</a>, so other people can find it &amp; enjoy it too!</p>
                     </div>
                     <div class="block donate">
-                        <p>This plugin has been developed in my (almost none) spare time and <strong>it's free</strong>.
+                        <p>This plugin has been developed in my (almost none) spare time and <strong>it's free</strong>, hence <i>support is not guaranteed</i>, nor I'll be able to reply to questions, fix bugs or accomodate requests, fast.<br>If you need a custom feature, or you need me to expedite some improvement or fix, I'll be happy to do it for a fee.
                             <br><br>Even a tiny donation will help me making it better, by updating it more often without switching to a commercial license.</p>
                         <p>
                             <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -383,6 +384,9 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                             <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3UR3E5PL3TW3E" target="_blank"><img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif"></a>
                         </p>
                     </div>
+                    <!-- <div class="block">
+                        <p></p>
+                    </div> -->
                 </div>
 
                 <!-- https://httpsimage.com/img/shambix_banner_750x90.jpg

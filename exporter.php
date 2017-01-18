@@ -8,13 +8,17 @@ function ccsve_export(){
             $export_only;
 
     $ccsve_export_check = isset($_REQUEST['export']) ? $_REQUEST['export'] : '';
+    // Parents or Children
     $export_only = isset($_REQUEST['only']) ? $_REQUEST['only'] : '';
+    // Backend Only?
     $admin_only = get_option('ccsve_admin_only');
     if($admin_only == 'Yes') {
         $admin_only = true;
     } else {
         $admin_only = false;
     }
+
+    // Custom Query - Not implemented
     //$custom_query_check = isset($_REQUEST['custom_query']) ;
 
     //if ($custom_query_check == false) {

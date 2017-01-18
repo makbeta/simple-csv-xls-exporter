@@ -1,7 +1,6 @@
 === Simple CSV/XLS Exporter ===
 
-Author: Shambix
-Contributors: Dukessa
+Contributors: Shambix, Dukessa
 Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
@@ -10,21 +9,20 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Export any content to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses & fields.
+Export any content to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses, users & fields.
 
 == Description ==
 
 This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
 
-> **Supports**
-* custom post types
-* custom post statuses
-* custom taxonomies
-* custom fields
-* WooCommerce products, categories and fields
-
-> **Next Release**
-* export only current user posts
+**Supports**
+>   * custom post types
+    * custom post statuses
+    * custom taxonomies
+    * custom fields
+    * WooCommerce products, categories and fields
+    * export only current user posts
+    * export specific user ID posts
 
 You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
 
@@ -60,36 +58,63 @@ Check the FAQ before opening new threads in the forum!
 = How do I choose my post type, taxonomies and custom fields? =
 
 Head over to the plugin's settings page, choose the post type. Then click "Save Changes" at the end of the page.
+
 At this point, a list of the custom taxonomies and fields associated with that post type will appear.
-Choose all of the fields you wish to export (use CTRL+click to select multiple ones) and click "Save Changes" again. Then click on the "Export" buttons to get your CSV or XLS file.
+
+Choose all of the fields you wish to export (use CTRL+click to select multiple ones) and click "Save Changes" again.
+
+Then click on the "Export" buttons to get your CSV or XLS file.
 
 = I don't see any custom fields on the Settings page. How come? =
 
 You mush first choose your post type and click "Save Changes" before you can see a list of the associated custom fields.
+
 Be sure to click "Save Changes" again in order to save your choices.
 
 = Can I export to CSV from frontend? =
 Yes, just place this URL where you want the download link/button to be: `<a class="btn" href="?export=csv">Export to CSV</a>`
+
 This will export as per plugin Settings.
 
 = Can I export to XLS from frontend? =
 Yes, just place this URL where you want the download link/button to be: `<a class="btn" href="?export=xls">Export to XLS</a>`
+
 This will export as per plugin Settings.
 
 = Can I change the post type, from the frontend URL? =
 Yes, use the URL var `?post_type=yourcustomposttypeslug`
+
 Keep in mind however, that it will still look for the taxonomies and custom fields as per plugin Settings.
+
+Eg. `https://yoursite.com/?export=xls&post_type=portfolio`
 
 = Can I only export parents or children? =
 Yes, use the URL var `?only=x`, where x is either `children` or `parents`.
+
 Default is both.
+
+Eg. `https://yoursite.com/?export=xls&post_type=portfolio&only=parents`
 
 = Does it support cyrillic characters? (eg. Russian) =
 Yes, but only for the CSV format (for now).
 
 = Can I export only posts with a certain post status? =
 Yes, as of v. 1.3.8.
+
 You can set it up from the Settings page as default, or add to your url `?post_status=nameofstatus`
+
+Eg. `https://yoursite.com/?export=xls&post_type=portfolio&post_status=draft`
+
+= Can I export only posts from a specific user, or the current one? =
+Yes, as of v. 1.4.
+
+To export the file with content from the currently logged-in user, add this to your url `?user`
+
+To export the file of a specific user ID, use this in your url `?user=x`, where X is the user ID you need.
+
+Default is all users.
+
+Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 
 == Screenshots ==
 
@@ -98,6 +123,13 @@ You can set it up from the Settings page as default, or add to your url `?post_s
 3. Settings Page
 
 == Changelog ==
+
+= 1.4 =
+* Added support for current user download
+* Added support for specific user ID download
+
+= 1.3.9.1 =
+* Fixed a minor PHP notice
 
 = 1.3.9 =
 * Fixed bugs: `Illegal string offset ‘selectinput’ in simple-csv-xls-exporter\settings.php on line 147`, `in_array() expects parameter 2 to be array, string given in simple-csv-xls-exporter\settings.php on line 147`, `syntax error, unexpected ‘[‘ in simple-csv-xls-exporter/settings.php on line 157`

@@ -6,7 +6,6 @@ function simple_csv_xls_exporter_csv_xls(){
             $export_only;
 
     // Get the custom post type that is being exported
-    // get post type from url var
     $post_type_var = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : '';
     if(empty($post_type_var)) {
         $ccsve_generate_post_type = get_option('ccsve_post_type');
@@ -15,7 +14,6 @@ function simple_csv_xls_exporter_csv_xls(){
     }
 
     // Get the custom post status that is being exported
-    // get post type from url var
     $post_status_var = isset($_REQUEST['post_status']) ? $_REQUEST['post_status'] : '';
     if(empty($post_status_var)) {
         $ccsve_generate_post_status = get_option('ccsve_post_status')["selectinput"][0];
@@ -23,6 +21,17 @@ function simple_csv_xls_exporter_csv_xls(){
         $ccsve_generate_post_status = $post_status_var;
     }
     //var_dump($ccsve_generate_post_status); echo $ccsve_generate_post_status; exit;
+
+    // Get only the content from specific user
+    if(isset($_REQUEST['user'])) {
+        if($_REQUEST['user'] == '') {
+            $user_id = intval(get_current_user_id());
+        } else {
+            $user_id = intval($_REQUEST['user']);
+        }
+    }
+    //echo $user_id;
+    //echo get_the_author_meta( 'display_name', $user_id );exit;
 
     // Get the custom fields (for the custom post type) that are being exported
     $ccsve_generate_custom_fields = get_option('ccsve_custom_fields');
@@ -34,11 +43,12 @@ function simple_csv_xls_exporter_csv_xls(){
     if($export_only == 'parents') {
 
         // Query the DB for all instances of the custom post type
-        $ccsve_generate_query = get_posts(array(
+        $ccsve_generate_query = new WP_Query( array(
             'post_type' => $ccsve_generate_post_type,
             'post_parent' => 0,
             'post_status' => $ccsve_generate_post_status,
             'posts_per_page' => -1,
+            'author' => $user_id,
             'order' => 'ASC',
             //'orderby' => 'name'
         ));
@@ -46,25 +56,27 @@ function simple_csv_xls_exporter_csv_xls(){
     } elseif($export_only == 'children') {
 
         // Query the DB for all instances of the custom post type
-        $csv_parent_export = get_posts(array(
+        $csv_parent_export = new WP_Query( array(
             'post_type' => $ccsve_generate_post_type,
             'post_parent' => 0,
             'post_status' => $ccsve_generate_post_status,
-            'posts_per_page' => -1
+            'posts_per_page' => -1,
+            'author' => $user_id
         ));
 
         $parents_ids_array = array();
-        foreach ($csv_parent_export as $post): setup_postdata($post);
+        foreach ($csv_parent_export->posts as $post): setup_postdata($post);
             //if($post->post_parent) != 0) {
                 $parents_ids_array[] = $post->ID;
             //}
         endforeach;
 
-        $ccsve_generate_query = get_posts(array(
+        $ccsve_generate_query = new WP_Query( array(
             'post_type' => $ccsve_generate_post_type,
             'post_status' => $ccsve_generate_post_status,
             'exclude' => $parents_ids_array,
             'posts_per_page' => -1,
+            'author' => $user_id,
             'order' => 'ASC',
             //'orderby' => 'name'
         ));
@@ -72,24 +84,29 @@ function simple_csv_xls_exporter_csv_xls(){
     } else {
 
         // Query the DB for all instances of the custom post type
-        $ccsve_generate_query = get_posts(array(
+        $ccsve_generate_query = new WP_Query( array(
             'post_type' => $ccsve_generate_post_type,
             'post_status' => $ccsve_generate_post_status,
             'posts_per_page' => -1,
+            'author' => $user_id,
             'order' => 'ASC',
             //'orderby' => 'name'
         ));
 
     }
 
+    //echo '<pre>';    var_dump($ccsve_generate_query);    echo '</pre>'; exit;
+    wp_reset_query(); wp_reset_postdata();
+
     // Count the number of instances of the custom post type
-    $ccsve_count_posts = count($ccsve_generate_query);
+    //$ccsve_count_posts = count($ccsve_generate_query);
+    $ccsve_count_posts = $ccsve_generate_query->found_posts;
 
     // Build an array of the custom field values
     $ccsve_generate_value_arr = array();
     $i = 0;
 
-    foreach ($ccsve_generate_query as $post): setup_postdata($post);
+    foreach ($ccsve_generate_query->posts as $post): setup_postdata($post);
 
         $post->permalink = get_permalink($post->ID);
         $post->post_thumbnail = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
