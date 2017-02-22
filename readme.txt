@@ -4,7 +4,7 @@ Contributors: Shambix, Dukessa
 Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
-Tested up to: 4.7.1
+Tested up to: 4.7.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,11 +16,11 @@ Export any content to CSV or XLS, through a link/button, from backend / frontend
 This plugin allows you to export your posts to CSV or XLS file, through a simple link/button, from either backend or frontend.
 
 **Supports**
->   * custom post types
-    * custom post statuses
+>   	* any custom post type
+    * custom post status
     * custom taxonomies
     * custom fields
-    * WooCommerce products, categories and fields
+    * WooCommerce products, orders, status, categories and fields
     * export only current user posts
     * export specific user ID posts
 
@@ -123,6 +123,12 @@ Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 3. Settings Page
 
 == Changelog ==
+
+= 1.4.1 =
+* Added support for ANY post type (including internal/non-public ones)
+* Added labels for post types instead of slug
+* Added support for WooCommerce Orders
+* Removed PHP format error above WP default fields settings box
 
 = 1.4 =
 * Added support for current user download

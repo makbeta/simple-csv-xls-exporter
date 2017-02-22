@@ -106,19 +106,24 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             //global $items;
             $args = array(
                 'public'   => true,
+				'publicly_queryable' => true,
+				'exclude_from_search' => true
             );
             // Get the field name from the $args array
-            $items = get_post_types($args);
+            $items = get_post_types($args, 'objects', 'or');
+
+			//echo '<pre>';			var_dump($items);			echo '</pre>'; exit;
+
             // Get the value of this setting
             $options = get_option('ccsve_post_type');
             // echo a proper input type="text"
             foreach ($items as $item) {
-                $checked = ($options == $item) ? ' checked="checked" ' : '';
+                $checked = ($options == $item->name) ? ' checked="checked" ' : '';
                 // radio buttons, 1 post type per time
-                echo '<input type="radio" id="post_type" name="ccsve_post_type" value="'.$item.'" '.$checked.'" />';
+                echo '<input type="radio" id="post_type" name="ccsve_post_type" value="'.$item->name.'" '.$checked.'" />';
                 // checkboxes dont work
                 //echo '<input type="checkbox" name="ccsve_post_type['.$item.']" value="'.$item.'" '.$checked.' />';
-                echo '<label for=post_type'.$item.'> '.$item.'</label>';
+                echo '<label for=post_type'.$item->name.'> '.$item->label.'</label>';
                 echo ' <br />';
             }
         }
@@ -304,6 +309,8 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             if(!current_user_can('manage_options')) {
                 wp_die(__('You do not have sufficient permissions to access this page.'));
             }
+
+			ini_set('display_errors', 0);
 
             // Render the settings template
             ?>
