@@ -141,7 +141,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             }
 
             /*echo '<pre>';
-            var_dump($ccsve_post_status);
+            var_dump($ccsve_post_status['selectinput'][0]);
             echo '</pre>'; exit;*/
 
             // 1 status
@@ -401,6 +401,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
 
                 <div class="footer">
                     <!-- <p>Plugin developed by <a href="http://www.shambix.com" target="blank">Shambix</a> | Need to customize it? <a href="mailto:info@shambix.com">Email me</a>! | Like the plugin? Give it a good <a href="https://wordpress.org/support/plugin/simple-csv-xls-exporter/reviews#new-topic-0" target="=_blank">review</a>, so other people can enjoy it too!</p> -->
+                    <br/>
                     <a href="http://www.shambix.com" target="blank"><img src="https://httpsimage.com/img/shambix_banner_918x104.jpg"></a>
                 </div>
 

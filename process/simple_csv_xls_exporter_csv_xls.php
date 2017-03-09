@@ -16,7 +16,8 @@ function simple_csv_xls_exporter_csv_xls(){
     // Get the custom post status that is being exported
     $post_status_var = isset($_REQUEST['post_status']) ? $_REQUEST['post_status'] : '';
     if(empty($post_status_var)) {
-        $ccsve_generate_post_status = get_option('ccsve_post_status')["selectinput"][0];
+        $ccsve_get_option_post_status = get_option('ccsve_post_status');
+        $ccsve_generate_post_status = $ccsve_get_option_post_status['selectinput'][0];
     } else {
         $ccsve_generate_post_status = $post_status_var;
     }

@@ -124,6 +124,9 @@ Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixed bug *Parse error: syntax error, unexpected ‘[‘ in …./woo/wp-content/plugins/simple-csv-xls-exporter/process/simple_csv_xls_exporter_csv_xls.php on line 19*
+
 = 1.4.1 =
 * Added support for ANY post type (including internal/non-public ones)
 * Added labels for post types instead of slug
