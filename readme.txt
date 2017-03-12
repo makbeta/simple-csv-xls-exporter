@@ -124,6 +124,9 @@ Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 
 == Changelog ==
 
+= 1.4.3 =
+* Set error_display to 0 during process
+
 = 1.4.2 =
 * Fixed bug *Parse error: syntax error, unexpected ‘[‘ in …./woo/wp-content/plugins/simple-csv-xls-exporter/process/simple_csv_xls_exporter_csv_xls.php on line 19*
 

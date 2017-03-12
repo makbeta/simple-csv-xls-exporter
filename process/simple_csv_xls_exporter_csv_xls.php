@@ -2,6 +2,12 @@
 
 // Normal export
 function simple_csv_xls_exporter_csv_xls(){
+
+    // Error display will output csv content and script will fail
+    if (!ini_get('display_errors') || ini_get('display_errors') == '1') {
+        ini_set('display_errors', '0');
+    }
+    
     global  $ccsve_export_check,
             $export_only;
 
