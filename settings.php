@@ -13,6 +13,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             register_setting('wp_ccsve-group', 'ccsve_delimiter');
             register_setting('wp_ccsve-group', 'ccsve_admin_only');
             register_setting('wp_ccsve-group', 'ccsve_post_type');
+			register_setting('wp_ccsve-group', 'ccsve_specified_posts');
             register_setting('wp_ccsve-group', 'ccsve_post_status');
             register_setting('wp_ccsve-group', 'ccsve_std_fields');
             register_setting('wp_ccsve-group', 'ccsve_tax_terms');
@@ -51,6 +52,14 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                 'simple_csv_exporter_settings-section'
             );
 
+			add_settings_field(
+                'ccsve_specified_posts',
+                'Only Export Specified Post IDs',
+                array(&$this, 'settings_field_select_specified_posts'),
+                'simple_csv_exporter_settings',
+                'simple_csv_exporter_settings-section'
+            );
+
             add_settings_field(
                 'ccsve_post_status',
                 'Post Status to Export',
@@ -74,7 +83,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                 'simple_csv_exporter_settings',
                 'simple_csv_exporter_settings-section'
             );
-
+			
             add_settings_field(
                 'ccsve_tax_terms',
                 'Taxonomy Terms to Export',
@@ -99,7 +108,7 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
             if($csv_delimiter == '') $csv_delimiter = '|';
             echo '<input type="text" id="csv_delimiter" name="ccsve_delimiter" value="'.$csv_delimiter.'" />';
         }
-
+		
         public function settings_field_select_admin() {
             // Get the value of this setting
             $admin_only = get_option('ccsve_admin_only');
@@ -143,7 +152,13 @@ if(!class_exists('SIMPLE_CSV_EXPORTER_SETTINGS')) {
                 echo ' <br />';
             }
         }
-
+		
+		public function settings_field_select_specified_posts() {
+            $specific_posts = get_option('ccsve_specified_posts');
+            if($specific_posts == '') $specific_posts = '';
+            echo '<input type="text" id="specific_posts" name="ccsve_specified_posts" value="'.$specific_posts.'" />';
+        }
+		
         public function settings_field_select_post_status() {
 			error_reporting(E_ERROR | E_PARSE);
             //global $items;

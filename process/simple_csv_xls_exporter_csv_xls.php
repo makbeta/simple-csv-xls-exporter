@@ -41,7 +41,15 @@ function simple_csv_xls_exporter_csv_xls(){
     //echo $user_id;
     //echo get_the_author_meta( 'display_name', $user_id );exit;
 
-    // Get the custom fields (for the custom post type) that are being exported
+	//Get only the specific posts by ID
+	$specific_posts = isset($_REQUEST['specific_posts']) ? $_REQUEST['specific_posts'] : get_option('ccsve_specified_posts');
+	if($specific_posts == '') {
+		$specific_posts = array();
+	} else {
+		$specific_posts = explode(",", $specific_posts);
+	}
+    
+	// Get the custom fields (for the custom post type) that are being exported
     $ccsve_generate_custom_fields = get_option('ccsve_custom_fields');
     $ccsve_generate_std_fields = get_option('ccsve_std_fields');
     $ccsve_generate_tax_terms = get_option('ccsve_tax_terms');
@@ -58,6 +66,7 @@ function simple_csv_xls_exporter_csv_xls(){
             'posts_per_page' => -1,
             'author' => $user_id,
             'order' => 'ASC',
+			'post_in' => $specific_posts,
             //'orderby' => 'name'
         ));
 
@@ -86,6 +95,7 @@ function simple_csv_xls_exporter_csv_xls(){
             'posts_per_page' => -1,
             'author' => $user_id,
             'order' => 'ASC',
+			'post_in' => $specific_posts,
             //'orderby' => 'name'
         ));
 
@@ -98,6 +108,7 @@ function simple_csv_xls_exporter_csv_xls(){
             'posts_per_page' => -1,
             'author' => $user_id,
             'order' => 'ASC',
+			'post__in' => $specific_posts,
             //'orderby' => 'name'
         ));
 
@@ -380,4 +391,3 @@ function simple_csv_xls_exporter_csv_xls(){
 
     }
 }
-?>
