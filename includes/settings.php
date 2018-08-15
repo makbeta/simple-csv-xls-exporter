@@ -1,6 +1,14 @@
 <?php
+/**
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * @project Simple CSV Exporter
+ */
 
-	function generate_post_meta_keys($post_type) {
+function generate_post_meta_keys($post_type) {
 
 		/*$store_meta_keys = 'simple_xls_exporter_'.$post_type.'_6h';
 		delete_transient($store_meta_keys);

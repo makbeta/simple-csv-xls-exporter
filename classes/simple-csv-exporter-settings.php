@@ -1,16 +1,12 @@
 <?php
 	/**
-	 * (C) 2018 by Kolja Nolte
-	 * kolja.nolte@gmail.com
-	 * http://www.koljanolte.com
-	 *
-	 * All information contained herein is,
-	 * and remains the property of Kolja Nolte.
-	 * The intellectual and technical concepts contained.
-	 * Dissemination of this information or reproduction
-	 * of this material is strictly forbidden unless prior
-	 * written permission is obtained from the author.
-	 */
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * @project Simple CSV Exporter
+ */
 
 	/** Prevents this file from being called directly */
 	if(!function_exists("add_action")) {
@@ -176,12 +172,17 @@
 				$options = get_option('ccsve_post_type');
 
 				foreach($post_types as $post_type) {
-					$checked = checked($post_type->name, $options, false);
+					$checked            = checked($post_type->name, $options, false);
+					$posts_in_post_type = get_posts("showposts=-1&post_type=" . $post_type->name);
+					$posts_in_post_type = count($posts_in_post_type);
 					?>
                <p>
                   <input type="radio" id="post_type_<?php echo $post_type->name; ?>" name="ccsve_post_type" value="<?php echo $post_type->name; ?>" <?php echo $checked; ?>>
                   <label for="post_type_<?php echo $post_type->name; ?>">
 							<?php echo $post_type->label ?>
+                     <span class="small">
+                        (<?php echo sprintf(_n("1 post", "%s posts", $posts_in_post_type), $posts_in_post_type); ?>)
+                     </span>
                   </label>
                </p>
 					<?php
@@ -211,12 +212,17 @@
 
 				// If Status selection is empty
 				if($ccsve_post_status == '' || is_null($ccsve_post_status)) {
-					$ccsve_post_status = array();
-					$ccsve_post_status = array('selectinput' => array(0 => 'any'));
+					/*$ccsve_post_status = array();
+					$ccsve_post_status = array('selectinput' => array(0 => 'any'));*/
 				}
 
-				$statuses               = get_post_stati($args, 'object', 'or');
-				$ccsve_post_status_num  = count($statuses) + 1;
+				$statuses              = get_post_stati($args, 'object', 'or');
+				$ccsve_post_status_num = count($statuses) + 1;
+
+				if($ccsve_post_status_num > 15) {
+					$ccsve_post_status_num = 15;
+				}
+
 				$selected_post_statuses = get_option('ccsve_post_status');
 
 				if(!isset($selected_post_statuses["selectinput"])) {
@@ -238,7 +244,7 @@
 						foreach($statuses as $status) {
 							$selected = '';
 
-							if(in_array($status->name, $selected_post_statuses)) {
+							if(in_array($status->name, $selected_post_statuses, true)) {
 								$selected = ' selected="selected"';
 							}
 							?>
@@ -269,6 +275,10 @@
 				$ccsve_std_fields     = get_option('ccsve_std_fields');
 				$ccsve_std_fields_num = count($fields);
 
+				if($ccsve_std_fields_num > 15) {
+					$ccsve_std_fields_num = 15;
+				}
+
 				echo '<select multiple="multiple" class="widefat" size="' . $ccsve_std_fields_num . '" name="ccsve_std_fields[selectinput][]">';
 				foreach($fields as $field) {
 					if($ccsve_std_fields['selectinput'] != null && in_array($field, $ccsve_std_fields['selectinput'])) {
@@ -278,6 +288,12 @@
 						echo '\n\t\<option value="' . $field . '">' . $field . '</option>';
 					}
 				}
+				?>
+            </select>
+            <p class="description">
+					<?php _e("Select multiple entries by holding your CTRL (Windows) or &#8984; (macOS) key.", TEXTDOMAIN); ?>
+            </p>
+				<?php
 			}
 
 			public function settings_field_select_tax_terms() {
@@ -285,7 +301,12 @@
 				$object_tax          = get_object_taxonomies($ccsve_post_type, 'names');
 				$ccsve_tax_terms     = get_option('ccsve_tax_terms');
 				$ccsve_tax_terms_num = count($object_tax);
-				echo '<select multiple="multiple" size="' . $ccsve_tax_terms_num . '" name="ccsve_tax_terms[selectinput][]">';
+
+				if($ccsve_tax_terms_num > 15) {
+					$ccsve_tax_terms_num = 15;
+				}
+
+				echo '<select multiple="multiple" class="widefat" size="' . $ccsve_tax_terms_num . '" name="ccsve_tax_terms[selectinput][]">';
 				foreach($object_tax as $tax) {
 					if(in_array($tax, $ccsve_tax_terms['selectinput'])) {
 						echo '\n\t<option selected="selected" value="' . $tax . '">' . $tax . '</option>';
@@ -294,6 +315,12 @@
 						echo '\n\t\<option value="' . $tax . '">' . $tax . '</option>';
 					}
 				}
+				?>
+            </select>
+            <p class="description">
+					<?php _e("Select multiple entries by holding your CTRL (Windows) or &#8984; (macOS) key.", TEXTDOMAIN); ?>
+            </p>
+				<?php
 			}
 
 			public function settings_field_select_custom_fields() {
@@ -302,9 +329,13 @@
 				$ccsve_custom_fields = get_option('ccsve_custom_fields');
 				$ccsve_meta_keys_num = count($meta_keys);
 
+				if($ccsve_meta_keys_num > 15) {
+					$ccsve_meta_keys_num = 15;
+				}
+
 				// Todo:
 
-				echo '<select multiple="multiple" size="' . $ccsve_meta_keys_num . '" name="ccsve_custom_fields[selectinput][]">';
+				echo '<select multiple="multiple" class="widefat" size="' . $ccsve_meta_keys_num . '" name="ccsve_custom_fields[selectinput][]">';
 				foreach($meta_keys as $meta_key) {
 					if(in_array($meta_key, $ccsve_custom_fields['selectinput'])) {
 						echo '\n\t<option selected="selected" value="' . $meta_key . '">' . $meta_key . '</option>';
@@ -313,6 +344,12 @@
 						echo '\n\t\<option value="' . $meta_key . '">' . $meta_key . '</option>';
 					}
 				}
+				?>
+            </select>
+            <p class="description">
+					<?php _e("Select multiple entries by holding your CTRL (Windows) or &#8984; (macOS) key.", TEXTDOMAIN); ?>
+            </p>
+				<?php
 			}
 
 			// WOO COMMERCE
@@ -451,28 +488,23 @@
 				<?php
 			}
 
-			// MENU CALLBACK
 			public function plugin_settings_page() {
 				if(!current_user_can('manage_options')) {
 					wp_die(__('You do not have sufficient permissions to access this page.'));
 				}
 
 				ini_set('display_errors', 0);
-
-				// Render the settings template
 				?>
             <div class="wrap simple_csv_exporter_wrap">
                <form method="post" action="options.php">
-						<?php @settings_fields('wp_ccsve-group'); ?>
-						<?php @do_settings_fields('wp_ccsve-group', 'simple_csv_exporter_settings-section'); ?>
+						<?php settings_fields('wp_ccsve-group'); ?>
+						<?php do_settings_fields('wp_ccsve-group', 'simple_csv_exporter_settings-section'); ?>
 						<?php do_settings_sections('Simple_CSV_Exporter_Settings'); ?>
-						<?php @submit_button(); ?>
+						<?php submit_button(); ?>
 
                   <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=csv">Export to CSV</a>
                   <a class="ccsve_button button button-success" href="options-general.php?page=simple_csv_exporter_settings&export=xls">Export to XLS</a>
-
                </form>
-
                <div class="sidebar">
                   <div class="block">
                      <p>
@@ -522,12 +554,6 @@
                         Even a tiny donation will help me making it better, by updating it more often without switching to a commercial license.
                      </p>
                      <p>
-                        <!-- <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-									 <input type="hidden" name="cmd" value="_s-xclick">
-									 <input type="hidden" name="hosted_button_id" value="3UR3E5PL3TW3E">
-									 <input type="image" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-									 <img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
-								</form> -->
                         <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3UR3E5PL3TW3E" target="_blank">
                            <img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif">
                         </a>

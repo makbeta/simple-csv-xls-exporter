@@ -1,15 +1,11 @@
 <?php
 	/**
-	 * (C) 2018 by Kolja Nolte
-	 * kolja.nolte@gmail.com
-	 * http://www.koljanolte.com
+	 * This program is free software; you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation; either version 2 of the License, or
+	 * (at your option) any later version.
 	 *
-	 * All information contained herein is,
-	 * and remains the property of Kolja Nolte.
-	 * The intellectual and technical concepts contained.
-	 * Dissemination of this information or reproduction
-	 * of this material is strictly forbidden unless prior
-	 * written permission is obtained from the author.
+	 * @project Simple CSV Exporter
 	 */
 
 	/** Prevents this file from being called directly */
