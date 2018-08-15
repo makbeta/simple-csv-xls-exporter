@@ -1,0 +1,76 @@
+/*
+ * (C) 2018 by Kolja Nolte
+ * kolja.nolte@gmail.com
+ * http://www.koljanolte.com
+ *
+ * All information contained herein is,
+ * and remains the property of Kolja Nolte.
+ * The intellectual and technical concepts contained.
+ * Dissemination of this information or reproduction
+ * of this material is strictly forbidden unless prior
+ * written permission is obtained from the author.
+ */
+
+.simple_csv_exporter_wrap h2 {
+   font-size: 28px;
+}
+
+.simple_csv_exporter_wrap form {
+   float: left;
+   width: 70%;
+}
+
+.simple_csv_exporter_wrap .boxes .box {
+   position:   relative;
+   border:     1px solid #e5e5e5;
+   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+   background: #fff;
+   margin-bottom: 30px;
+}
+
+.simple_csv_exporter_wrap .boxes .box .box-title-container {
+   border-bottom: 1px solid #eee;
+}
+
+.simple_csv_exporter_wrap .boxes .box .box-title-container .box-title {
+   font-size:   16px;
+   padding:     10px;
+   margin:      0;
+   line-height: 1.4;
+}
+
+.simple_csv_exporter_wrap .boxes .box .box-content {
+   padding:     0 10px;
+   line-height: 1.5em;
+   font-size:   13px;
+}
+
+.simple_csv_exporter_wrap .sidebar {
+   float:       left;
+   margin-left: 5%;
+   width:       20%;
+}
+
+.simple_csv_exporter_wrap .sidebar .block {
+   background-color: #ddd;
+   border:           1px solid #999;
+   margin-bottom:    20px;
+   padding:          10px;
+}
+
+.simple_csv_exporter_wrap .sidebar .donate p a {
+   display:    block;
+   margin:     5px auto;
+   text-align: center;
+}
+
+.simple_csv_exporter_wrap .footer {
+   clear:      both;
+   margin:     20px auto;
+   text-align: center;
+}
+
+.simple_csv_exporter_wrap .footer a {
+   margin:     0 auto;
+   text-align: center;
+}
