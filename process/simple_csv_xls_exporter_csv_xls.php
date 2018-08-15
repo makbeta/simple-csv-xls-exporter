@@ -1,26 +1,28 @@
 <?php
-/**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * @project Simple CSV Exporter
- */
+	/**
+	 * This program is free software; you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation; either version 2 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * @project Simple CSV Exporter
+	 */
 
-	// Normal export
+	/** Prevents this file from being called directly */
+	if(!function_exists("add_action")) {
+		wp_die();
+	}
+
 	function simple_csv_xls_exporter_csv_xls() {
-
-		// Error display will output csv content and script will fail
-		if(!ini_get('display_errors') || ini_get('display_errors') == '1') {
+		/** Error display will output csv content and script will fail */
+		if(!ini_get('display_errors') || ini_get('display_errors') === '1') {
 			ini_set('display_errors', '0');
 		}
-		//error_reporting(E_ERROR | E_PARSE);
 
 		global $ccsve_export_check, $export_only;
 
 		// Get the custom post type that is being exported
-		$post_type_var = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : '';
+		$post_type_var = $_REQUEST['post_type'] ?? '';
 		if(empty($post_type_var)) {
 			$ccsve_generate_post_type = get_option('ccsve_post_type');
 		}
@@ -41,11 +43,11 @@
 
 		// Get only the content from specific user
 		if(isset($_REQUEST['user'])) {
-			if($_REQUEST['user'] == '') {
-				$user_id = intval(get_current_user_id());
+			if(!$_REQUEST['user']) {
+				$user_id = (int)get_current_user_id();
 			}
 			else {
-				$user_id = intval($_REQUEST['user']);
+				$user_id = (int)$_REQUEST['user'];
 			}
 		}
 		//echo $user_id;
@@ -154,7 +156,7 @@
 				foreach($post as $key => $value) {
 					if(in_array($key, $ccsve_generate_std_fields['selectinput'])) {
 						// Prevent SYLK format issue
-						if($key == 'ID') {
+						if($key === 'ID') {
 							// add an apostrophe before ID
 							//$ccsve_generate_value_arr["'".$key][$i] = $post->$key;
 							// or make it lower-case
@@ -168,11 +170,6 @@
 					}
 				}
 			}
-
-			/*echo '<pre>';
-			var_dump($ccsve_generate_value_arr);
-			echo '</pre>';
-			exit;*/
 
 			// get custom taxonomy information
 			if(!empty($ccsve_generate_tax_terms['selectinput'])) {
@@ -212,47 +209,6 @@
 				}
 			}
 
-			// get the WooCommerce field values for each instance of the custom post type
-			/*$ccsve_generate_post_values = get_post_custom($post->ID);
-			foreach ($ccsve_generate_custom_fields['selectinput'] as $key) {
-				 // check if each custom field value matches a custom field that is being exported
-				 if (array_key_exists($key, $ccsve_generate_post_values)) {
-					  // if the the custom fields match, save them to the array of custom field values
-					  $ccsve_generate_value_arr[$key][$i] = $ccsve_generate_post_values[$key]['0'];
-				}
-		  }*/
-			/*if(!empty($ccsve_generate_woocommerce_fields['selectinput']) && class_exists('WC_Product')) {
-				 global  $woocommerce,
-							$product;
-				 //$product = wc_get_product( $post->ID );
-				 $product_id = $product->id;
-
-				 $get_all_meta = get_post_meta($product_id);
-
-				 // 'sku',
-				 $price = get_post_meta($product_id, '_price', true);
-
-				 'regular_price',
-				 'sale_price',
-				 'manage_stock',
-				 'stock_status',
-				 'backorders',
-				 'stock',
-				 'featured',
-				 'featured_image',
-				 'product_gallery'
-
-				 // Price
-				 //$price = get_post_meta($product_id, '_price', true);
-
-				 echo '<pre>';
-				 //var_dump($product);
-				 //var_dump($price);
-				 var_dump($get_all_meta);
-				 echo '</pre>';
-				 exit;
-			}*/
-
 			$i++;
 
 		endforeach;
@@ -270,22 +226,11 @@
 			}
 		}
 
-		/*echo '<pre>';
-		var_dump($ccsve_generate_value_arr );
-		echo '</pre>';
-		exit;*/
+		if($ccsve_export_check === 'csv') {
+			$csv_delimiter               = get_option('ccsve_delimiter');
+			$ccsve_generate_csv_filename = simple_csv_xls_exporter_generate_file_name($ccsve_generate_post_type) . ".csv";
 
-		// CSV
-
-		if($ccsve_export_check == 'csv') {
-
-			// Delimiter
-			$csv_delimiter = get_option('ccsve_delimiter');
-
-			// build a filename based on the post type and the data/time
-			$ccsve_generate_csv_filename = SIMPLE_CSV_XLS_EXPORTER_EXTRA_FILE_NAME . $ccsve_generate_post_type . '-' . date('dMY_Hi') . '-export.csv';
-
-			//output the headers for the CSV file
+			/** Output the headers for the CSV file */
 			header('Content-Encoding: UTF-8');
 			header("Content-type: text/csv; charset=utf-8");
 			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -296,8 +241,8 @@
 
 			echo "\xEF\xBB\xBF"; // UTF-8 BOM
 
-			//open the file stream
-			$fh = @fopen('php://output', 'w');
+			/** Open the file stream */
+			$fh = fopen('php://output', 'wb');
 
 			$headerDisplayed = false;
 
@@ -307,12 +252,6 @@
 					fputcsv($fh, array_keys($ccsve_generate_value_arr));
 					$headerDisplayed = true;
 				}
-
-				// Replace tabs, linebreaks and pipes
-				/*$data = preg_replace("/\t/", "\\t", $data);
-				$data = preg_replace("/\r?\n/", "\\n", $data);
-				$data = preg_replace("/|/", "", $data);
-				if(strstr($str, '"')) $str = '"' . str_replace('"', '""', $str) . '"';*/
 
 				// Put the data from the new multi-dimensional array into the stream
 				fputcsv($fh, $data, $csv_delimiter);
@@ -326,34 +265,19 @@
 
 		// PHP
 
-		if($ccsve_export_check == 'xls') {
-
+		if($ccsve_export_check === 'xls') {
+			/**
+			 * @param $str
+			 */
 			function cleanData(&$str) {
 				$str = preg_replace("/\t/", "\\t", $str);
 				$str = preg_replace("/\r?\n/", "\\n", $str);
-				// replace commas with nothing
-				//$str = preg_replace("/,/", "", $str);
-				if(strstr($str, '"')) {
+				if(false !== strpos($str, '"')) {
 					$str = '"' . str_replace('"', '""', $str) . '"';
 				}
-				//$str = mb_convert_encoding($str, 'ASCII', 'UTF-8');
 			}
 
-			// Check if there are Cyrillic chars
-			/*$i = 0;
-			foreach ( $ccsve_generate_value_arr_new as $check_array ) {
-				 array_walk($check_array, 'cleanData');
-				 foreach ($check_array as $key => $value) {
-					  $is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity($value, array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
-					  if($is_russian == 1) {
-							$i++;
-					  }
-				 }
-			}
-			$is_russian = $i;*/
-
-			// EXCEL .xls - Raises an unavoidable warning http://blogs.msdn.com/b/vsofficedeveloper/archive/2008/03/11/excel-2007-extension-warning.aspx
-			$filename = SIMPLE_CSV_XLS_EXPORTER_EXTRA_FILE_NAME . $ccsve_generate_post_type . '-' . date('dMY_Hi') . '-export.xls';
+			$filename = simple_csv_xls_exporter_generate_file_name($ccsve_generate_post_type) . ".xls";
 
 			//output the headers for the XLS file
 			header('Content-Encoding: UTF-8');
@@ -364,12 +288,7 @@
 			header("Expires: 0");
 			header("Pragma: public");
 
-			// This works but breaks the xls columns
-			/*if($is_russian > 0) {
-				 echo "\xEF\xBB\xBF";
-			}*/
-
-			$flag = false; // Remove field names from the top?
+			$flag = false;
 			foreach($ccsve_generate_value_arr_new as $data) {
 				if(!$flag) {
 					echo implode("\t", array_keys($ccsve_generate_value_arr)) . "\r\n";
@@ -377,37 +296,8 @@
 				}
 				array_walk($data, 'cleanData');
 
-				// DEBUG
-				// Get encoding format
-				//$data_string = implode("\t", array_values($data));
-				// echo mb_detect_encoding($data_string);
-				// Support for Euro sign
-				// http://php.net/manual/en/function.utf8-decode.php
-				//iconv("UTF-8", "CP1252", $data)
-				//$data_string = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $data_string);
-				//$is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity($data_string, array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
-				//$is_russian = preg_match('/&#10[78]\d/', mb_encode_numericentity(implode("\t", array_values($data)), array(0x0, 0x2FFFF, 0, 0xFFFF), 'UTF-8'));
-				//var_dump($is_russian);
-
-				// Check for EUR sign
-				/*foreach ($data as $key => $value) {
-					 //iconv("UTF-8", "CP1252", $value);
-					 //echo 'Original : ', $value, PHP_EOL;
-					 //echo 'TRANSLIT : ', iconv("UTF-8", "ISO-8859-1//TRANSLIT", $value), PHP_EOL;
-					 //echo 'IGNORE   : ', iconv("UTF-8", "ISO-8859-1//IGNORE", $value), PHP_EOL;
-					 //echo 'Plain    : ', iconv("UTF-8", "ISO-8859-1", $value), PHP_EOL;
-
-					 $value = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $value);
-				}*/
-
-				//if($is_russian > 0) {
-				//$data_string = implode("\t", array_values($data));
-				//} else {
-				// Add Support for special latin characters (but not Cyrillic)
 				$data_string = implode("\t", array_map('utf8_decode', array_values($data)));
-				//}
 
-				// Final output
 				echo $data_string . "\r\n";
 			}
 			exit;

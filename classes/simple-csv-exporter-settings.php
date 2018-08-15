@@ -1,12 +1,12 @@
 <?php
 	/**
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * @project Simple CSV Exporter
- */
+	 * This program is free software; you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License as published by
+	 * the Free Software Foundation; either version 2 of the License, or
+	 * (at your option) any later version.
+	 *
+	 * @project Simple CSV Exporter
+	 */
 
 	/** Prevents this file from being called directly */
 	if(!function_exists("add_action")) {
@@ -43,7 +43,7 @@
 
 				add_settings_field(
 					'ccsve_delimiter',
-					__("Set the CSV delimiter", TEXTDOMAIN),
+					__("CSV delimiter", TEXTDOMAIN),
 					array(&$this, 'settings_field_input_delimiter'),
 					'Simple_CSV_Exporter_Settings',
 					'simple_csv_exporter_settings-section'
@@ -125,7 +125,12 @@
 					$csv_delimiter = '|';
 				}
 				?>
-            <input type="text" id="csv_delimiter" class="widefat" name="ccsve_delimiter" value="<?php echo $csv_delimiter; ?>"/>
+            <p>
+               <input type="text" id="csv_delimiter" placeholder="<?php _e("Enter delimiter...", TEXTDOMAIN); ?>" class="widefat" name="ccsve_delimiter" value="<?php echo $csv_delimiter; ?>"/>
+            </p>
+            <p class="description">
+					<?php _e("Enter the delimiter that is being used to separate each column in .csv files.", TEXTDOMAIN); ?>
+            </p>
 				<?php
 			}
 

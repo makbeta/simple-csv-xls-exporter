@@ -9,12 +9,6 @@
  */
 
 function generate_post_meta_keys($post_type) {
-
-		/*$store_meta_keys = 'simple_xls_exporter_'.$post_type.'_6h';
-		delete_transient($store_meta_keys);
-
-		if(get_transient($store_meta_keys) === false) {*/
-
 		global $wpdb;
 		$query = "
             SELECT DISTINCT($wpdb->postmeta.meta_key)
@@ -41,7 +35,12 @@ function generate_post_meta_keys($post_type) {
 		return $meta_keys;
 	}
 
-	// Get standard WP Fields
+	/**
+	 * @param $post_type
+	 * @param $post_status
+	 *
+	 * @return array
+	 */
 	function generate_std_fields($post_type, $post_status) {
 		if($post_status == '' || is_null($post_status)) {
 			$post_status = 'any';
