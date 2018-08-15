@@ -1,4 +1,17 @@
 <?php
+/**
+ * (C) 2018 by Kolja Nolte
+ * kolja.nolte@gmail.com
+ * http://www.koljanolte.com
+ *
+ * All information contained herein is,
+ * and remains the property of Kolja Nolte.
+ * The intellectual and technical concepts contained.
+ * Dissemination of this information or reproduction
+ * of this material is strictly forbidden unless prior
+ * written permission is obtained from the author.
+ */
+
 global  $ccsve_export_check,
         //$custom_query_check,
         $export_only;

@@ -1,6 +1,6 @@
 === Simple CSV/XLS Exporter ===
 
-Contributors: Shambix, Dukessa
+Contributors: Shambix, Dukessa, thaikolja
 Author URL: http://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
