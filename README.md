@@ -1,10 +1,10 @@
 === Simple CSV/XLS Exporter ===
 
-Contributors: Shambix, Dukessa, thaikolja
-Author URL: http://www.shambix.com
+Contributors: Shambix, Dukessa, thaikolja, akforsyt
+Author URL: https://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
-Tested up to: 4.9.8
+Tested up to: 5.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,7 @@ This plugin allows you to export your posts to CSV or XLS file, through a simple
 * WooCommerce products, orders, status, categories and fields
 * export only current user posts
 * export specific user ID posts
+* export specific post IDs
 
 You can set the default post type, with its taxonomies and custom fields, that you wish to export, from the Settings page.
 
@@ -117,6 +118,14 @@ Default is all users.
 
 Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 
+= Can I export specific posts? =
+
+Yes, as of v. 1.5.
+
+You need the parameter `?specific_posts` in the export url.
+
+Eg. `https://yoursite.com/?export=xls&specific_posts=1,2,3`
+
 == Screenshots ==
 
 1. Settings Page
@@ -124,6 +133,26 @@ Eg. `https://yoursite.com/?export=xls&post_type=portfolio&user`
 3. Settings Page
 
 == Changelog ==
+
+= 1.5 =
+
+* Merged with thaikolja's fork and refactoring
+* Added `specific_posts` parameter (Special thanks to: akforsyt)
+
+= 1.4.9 =
+
+* Plugin Refactoring (Special thanks to: thaikolja)
+* Replaced spaces with tabs for intendation.
+* Renamed classes (`SIMPLE_CSV_EXPORTER` to `Simple_CSV_Exporter`) to avoid confusion with constants.
+* Added documentation to some functions and classes.
+* Used strict comparison (`===`) where needed.
+* Removed some comment areas used for development purposes.
+* Added and rewrote some comments.
+* Added textdomain and made several strings localizable.
+* Restructured files, functions and classes and put them in appropriate directories.
+* Renamed some constants to be more accurate.
+* Added filters:
+	- `simple_csv_xls_exporter_export_file_name`
 
 = 1.4.6 =
 * Added option to set custom Delimiter
