@@ -4,7 +4,7 @@ Contributors: Shambix, Dukessa, thaikolja, akforsyt
 Author URL: https://www.shambix.com
 Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
-Tested up to: 5.2.2
+Tested up to: 5.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,20 @@ Eg. `https://yoursite.com/?export=xls&specific_posts=1,2,3`
 
 == Changelog ==
 
+= 1.5.3 =
+
+* Pulled GabrielFalkoski's merge request
+* Added a Hook Filter to handle content to export `ccsve_export_returns`
+
+= 1.5.2 =
+
+* Fix for "Warning: Use of undefined constant SIMPLE_CSV_EXPORTER_VERSION"
+
+= 1.5.1 =
+
+* Fixed action url from plugins page
+* Fixed PHP syntax error (unexpected ?)
+
 = 1.5 =
 
 * Merged with thaikolja's fork and refactoring
@@ -153,8 +167,7 @@ Eg. `https://yoursite.com/?export=xls&specific_posts=1,2,3`
 * Added textdomain and made several strings localizable.
 * Restructured files, functions and classes and put them in appropriate directories.
 * Renamed some constants to be more accurate.
-* Added filters:
-	- `simple_csv_xls_exporter_export_file_name`
+* Added filter `simple_csv_xls_exporter_export_file_name`
 
 = 1.4.6 =
 * Added option to set custom Delimiter
