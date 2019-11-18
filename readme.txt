@@ -2,12 +2,12 @@
 
 Contributors: Shambix, Dukessa, thaikolja, akforsyt
 Author URL: https://www.shambix.com
-Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 Requires at least: 4
 Tested up to: 5.3
 Stable tag: trunk
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Tags: csv, xls, export, excel, custom fields, custom post types, export products, export posts
 
 Export any content to CSV or XLS, through a link/button, from backend / frontend. Supports custom post types, WooCommerce, custom taxonomies, post statuses, users & fields.
 
