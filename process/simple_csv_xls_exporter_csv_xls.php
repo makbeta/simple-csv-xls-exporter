@@ -164,6 +164,14 @@
 							$low_id                                = 'id';
 							$ccsve_generate_value_arr[$low_id][$i] = $post->$key;
 						}
+						// WordPress will auto-encoded characters such as &reg;. 
+						// Do a conversion from ASCII to UTF-8 on post titles, so the characters are visible in the final file.
+						elseif($key === 'post_title') {
+							$new_title = $post->$key;
+							$new_title = htmlentities($new_title, ENT_QUOTES | ENT_SUBSTITUTE, "ISO-8859-15");
+							$new_title = html_entity_decode($new_title, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+							$ccsve_generate_value_arr[$key][$i] = $new_title;
+						}
 						else {
 							$ccsve_generate_value_arr[$key][$i] = $post->$key;
 						}
